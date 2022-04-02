@@ -1,0 +1,11 @@
+syntax = "proto3";
+package cosmonaut.wayne.wayne;
+
+option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
+
+message InterfaceApr {
+  uint64 id = 1;
+  string blocktime = 2; 
+  int32 timeApr = 3; 
+  string creator = 4;
+}

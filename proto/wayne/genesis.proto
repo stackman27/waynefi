@@ -1,0 +1,29 @@
+syntax = "proto3";
+package cosmonaut.wayne.wayne;
+
+import "gogoproto/gogo.proto";
+import "wayne/params.proto";
+import "wayne/pool.proto";
+import "wayne/deposit.proto";
+import "wayne/borrow.proto";
+import "wayne/user.proto";
+import "wayne/interface_apr.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
+
+// GenesisState defines the wayne module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated Pool poolList = 2 [(gogoproto.nullable) = false];
+  uint64 poolCount = 3;
+  repeated Deposit depositList = 4 [(gogoproto.nullable) = false];
+  uint64 depositCount = 5;
+  repeated Borrow borrowList = 6 [(gogoproto.nullable) = false];
+  uint64 borrowCount = 7;
+  repeated User userList = 8 [(gogoproto.nullable) = false];
+  uint64 userCount = 9;
+  repeated InterfaceApr interfaceAprList = 10 [(gogoproto.nullable) = false];
+  uint64 interfaceAprCount = 11;
+  // this line is used by starport scaffolding # genesis/proto/state
+}

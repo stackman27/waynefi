@@ -1,0 +1,17 @@
+syntax = "proto3";
+package cosmonaut.wayne.wayne;
+
+option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
+import "wayne/interface_apr.proto";
+import "wayne/user.proto";
+
+message Pool {
+  uint64 id = 1;
+  string asset = 2; 
+  string denom = 3; 
+  int32 collatoralFactor = 4; 
+  int32 depth = 5; 
+  repeated InterfaceApr aPR = 6; 
+  repeated User users = 7; 
+  string creator = 8;
+}

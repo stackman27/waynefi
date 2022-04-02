@@ -1,0 +1,14 @@
+syntax = "proto3";
+package cosmonaut.wayne.wayne;
+
+option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
+import "wayne/deposit.proto";
+import "wayne/borrow.proto";
+
+message User {
+  string creator = 1;
+  uint64 id = 2; 
+  repeated bool collateral = 3; 
+  repeated Deposit deposit = 4; 
+  repeated Borrow borrow = 5; 
+}

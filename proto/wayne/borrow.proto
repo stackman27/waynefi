@@ -1,0 +1,13 @@
+syntax = "proto3";
+package cosmonaut.wayne.wayne;
+
+option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
+
+message Borrow {
+  uint64 id = 1;
+  int32 blockHeight = 2; 
+  string asset = 3; 
+  int32 amount = 4; 
+  string denom = 5; 
+  string creator = 6;
+}
