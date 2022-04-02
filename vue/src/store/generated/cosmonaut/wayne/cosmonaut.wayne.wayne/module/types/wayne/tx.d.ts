@@ -91,6 +91,7 @@ export interface MsgCreateUser {
     collateral: boolean[];
     deposit: Deposit[];
     borrow: Borrow[];
+    assetBalances: number[];
 }
 export interface MsgCreateUserResponse {
     id: number;
@@ -101,6 +102,7 @@ export interface MsgUpdateUser {
     collateral: boolean[];
     deposit: Deposit[];
     borrow: Borrow[];
+    assetBalances: number[];
 }
 export interface MsgUpdateUserResponse {
 }

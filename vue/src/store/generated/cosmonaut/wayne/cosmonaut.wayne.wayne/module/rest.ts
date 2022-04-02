@@ -298,6 +298,7 @@ export interface WayneUser {
   collateral?: boolean[];
   deposit?: WayneDeposit[];
   borrow?: WayneBorrow[];
+  assetBalances?: number[];
 }
 
 export type QueryParamsType = Record<string | number, any>;

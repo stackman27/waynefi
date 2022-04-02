@@ -107,6 +107,7 @@ export interface MsgCreateUser {
   collateral: boolean[];
   deposit: Deposit[];
   borrow: Borrow[];
+  assetBalances: number[];
 }
 
 export interface MsgCreateUserResponse {
@@ -119,6 +120,7 @@ export interface MsgUpdateUser {
   collateral: boolean[];
   deposit: Deposit[];
   borrow: Borrow[];
+  assetBalances: number[];
 }
 
 export interface MsgUpdateUserResponse {}
@@ -1785,7 +1787,11 @@ export const MsgDeleteBorrowResponse = {
   },
 };
 
-const baseMsgCreateUser: object = { creator: "", collateral: false };
+const baseMsgCreateUser: object = {
+  creator: "",
+  collateral: false,
+  assetBalances: 0,
+};
 
 export const MsgCreateUser = {
   encode(message: MsgCreateUser, writer: Writer = Writer.create()): Writer {
@@ -1803,6 +1809,11 @@ export const MsgCreateUser = {
     for (const v of message.borrow) {
       Borrow.encode(v!, writer.uint32(34).fork()).ldelim();
     }
+    writer.uint32(42).fork();
+    for (const v of message.assetBalances) {
+      writer.int32(v);
+    }
+    writer.ldelim();
     return writer;
   },
 
@@ -1813,6 +1824,7 @@ export const MsgCreateUser = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1835,6 +1847,16 @@ export const MsgCreateUser = {
         case 4:
           message.borrow.push(Borrow.decode(reader, reader.uint32()));
           break;
+        case 5:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.assetBalances.push(reader.int32());
+            }
+          } else {
+            message.assetBalances.push(reader.int32());
+          }
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1848,6 +1870,7 @@ export const MsgCreateUser = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
     } else {
@@ -1866,6 +1889,11 @@ export const MsgCreateUser = {
     if (object.borrow !== undefined && object.borrow !== null) {
       for (const e of object.borrow) {
         message.borrow.push(Borrow.fromJSON(e));
+      }
+    }
+    if (object.assetBalances !== undefined && object.assetBalances !== null) {
+      for (const e of object.assetBalances) {
+        message.assetBalances.push(Number(e));
       }
     }
     return message;
@@ -1893,6 +1921,11 @@ export const MsgCreateUser = {
     } else {
       obj.borrow = [];
     }
+    if (message.assetBalances) {
+      obj.assetBalances = message.assetBalances.map((e) => e);
+    } else {
+      obj.assetBalances = [];
+    }
     return obj;
   },
 
@@ -1901,6 +1934,7 @@ export const MsgCreateUser = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     } else {
@@ -1919,6 +1953,11 @@ export const MsgCreateUser = {
     if (object.borrow !== undefined && object.borrow !== null) {
       for (const e of object.borrow) {
         message.borrow.push(Borrow.fromPartial(e));
+      }
+    }
+    if (object.assetBalances !== undefined && object.assetBalances !== null) {
+      for (const e of object.assetBalances) {
+        message.assetBalances.push(e);
       }
     }
     return message;
@@ -1985,7 +2024,12 @@ export const MsgCreateUserResponse = {
   },
 };
 
-const baseMsgUpdateUser: object = { creator: "", id: 0, collateral: false };
+const baseMsgUpdateUser: object = {
+  creator: "",
+  id: 0,
+  collateral: false,
+  assetBalances: 0,
+};
 
 export const MsgUpdateUser = {
   encode(message: MsgUpdateUser, writer: Writer = Writer.create()): Writer {
@@ -2006,6 +2050,11 @@ export const MsgUpdateUser = {
     for (const v of message.borrow) {
       Borrow.encode(v!, writer.uint32(42).fork()).ldelim();
     }
+    writer.uint32(50).fork();
+    for (const v of message.assetBalances) {
+      writer.int32(v);
+    }
+    writer.ldelim();
     return writer;
   },
 
@@ -2016,6 +2065,7 @@ export const MsgUpdateUser = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2041,6 +2091,16 @@ export const MsgUpdateUser = {
         case 5:
           message.borrow.push(Borrow.decode(reader, reader.uint32()));
           break;
+        case 6:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.assetBalances.push(reader.int32());
+            }
+          } else {
+            message.assetBalances.push(reader.int32());
+          }
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2054,6 +2114,7 @@ export const MsgUpdateUser = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
     } else {
@@ -2077,6 +2138,11 @@ export const MsgUpdateUser = {
     if (object.borrow !== undefined && object.borrow !== null) {
       for (const e of object.borrow) {
         message.borrow.push(Borrow.fromJSON(e));
+      }
+    }
+    if (object.assetBalances !== undefined && object.assetBalances !== null) {
+      for (const e of object.assetBalances) {
+        message.assetBalances.push(Number(e));
       }
     }
     return message;
@@ -2105,6 +2171,11 @@ export const MsgUpdateUser = {
     } else {
       obj.borrow = [];
     }
+    if (message.assetBalances) {
+      obj.assetBalances = message.assetBalances.map((e) => e);
+    } else {
+      obj.assetBalances = [];
+    }
     return obj;
   },
 
@@ -2113,6 +2184,7 @@ export const MsgUpdateUser = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     } else {
@@ -2136,6 +2208,11 @@ export const MsgUpdateUser = {
     if (object.borrow !== undefined && object.borrow !== null) {
       for (const e of object.borrow) {
         message.borrow.push(Borrow.fromPartial(e));
+      }
+    }
+    if (object.assetBalances !== undefined && object.assetBalances !== null) {
+      for (const e of object.assetBalances) {
+        message.assetBalances.push(e);
       }
     }
     return message;

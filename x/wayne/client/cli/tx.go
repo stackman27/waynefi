@@ -45,7 +45,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdDeleteBorrow())
 
 	cmd.AddCommand(CmdCreateUser())
-	cmd.AddCommand(CmdUpdateUser())
+	//cmd.AddCommand(CmdUpdateUser())
 	cmd.AddCommand(CmdDeleteUser())
 	cmd.AddCommand(CmdCreateInterfaceApr())
 	cmd.AddCommand(CmdUpdateInterfaceApr())

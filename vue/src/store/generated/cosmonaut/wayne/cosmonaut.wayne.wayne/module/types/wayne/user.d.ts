@@ -8,6 +8,7 @@ export interface User {
     collateral: boolean[];
     deposit: Deposit[];
     borrow: Borrow[];
+    assetBalances: number[];
 }
 export declare const User: {
     encode(message: User, writer?: Writer): Writer;

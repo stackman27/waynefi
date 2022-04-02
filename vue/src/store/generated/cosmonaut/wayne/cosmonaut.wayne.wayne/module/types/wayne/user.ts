@@ -12,9 +12,15 @@ export interface User {
   collateral: boolean[];
   deposit: Deposit[];
   borrow: Borrow[];
+  assetBalances: number[];
 }
 
-const baseUser: object = { creator: "", id: 0, collateral: false };
+const baseUser: object = {
+  creator: "",
+  id: 0,
+  collateral: false,
+  assetBalances: 0,
+};
 
 export const User = {
   encode(message: User, writer: Writer = Writer.create()): Writer {
@@ -35,6 +41,11 @@ export const User = {
     for (const v of message.borrow) {
       Borrow.encode(v!, writer.uint32(42).fork()).ldelim();
     }
+    writer.uint32(50).fork();
+    for (const v of message.assetBalances) {
+      writer.int32(v);
+    }
+    writer.ldelim();
     return writer;
   },
 
@@ -45,6 +56,7 @@ export const User = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -70,6 +82,16 @@ export const User = {
         case 5:
           message.borrow.push(Borrow.decode(reader, reader.uint32()));
           break;
+        case 6:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.assetBalances.push(reader.int32());
+            }
+          } else {
+            message.assetBalances.push(reader.int32());
+          }
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -83,6 +105,7 @@ export const User = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
     } else {
@@ -106,6 +129,11 @@ export const User = {
     if (object.borrow !== undefined && object.borrow !== null) {
       for (const e of object.borrow) {
         message.borrow.push(Borrow.fromJSON(e));
+      }
+    }
+    if (object.assetBalances !== undefined && object.assetBalances !== null) {
+      for (const e of object.assetBalances) {
+        message.assetBalances.push(Number(e));
       }
     }
     return message;
@@ -134,6 +162,11 @@ export const User = {
     } else {
       obj.borrow = [];
     }
+    if (message.assetBalances) {
+      obj.assetBalances = message.assetBalances.map((e) => e);
+    } else {
+      obj.assetBalances = [];
+    }
     return obj;
   },
 
@@ -142,6 +175,7 @@ export const User = {
     message.collateral = [];
     message.deposit = [];
     message.borrow = [];
+    message.assetBalances = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     } else {
@@ -165,6 +199,11 @@ export const User = {
     if (object.borrow !== undefined && object.borrow !== null) {
       for (const e of object.borrow) {
         message.borrow.push(Borrow.fromPartial(e));
+      }
+    }
+    if (object.assetBalances !== undefined && object.assetBalances !== null) {
+      for (const e of object.assetBalances) {
+        message.assetBalances.push(e);
       }
     }
     return message;

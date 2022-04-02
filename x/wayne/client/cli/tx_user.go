@@ -31,13 +31,14 @@ func CmdCreateUser() *cobra.Command {
 			argsDeposit := []*types.Deposit{}
 
 			argsBorrow := []*types.Borrow{}
+			argsAssetBalances := []int32{2000, 1000, 1000, 1000, 1000, 1000, 1000, 1000}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgCreateUser(clientCtx.GetFromAddress().String(), argsCollateral, argsDeposit, argsBorrow)
+			msg := types.NewMsgCreateUser(clientCtx.GetFromAddress().String(), argsCollateral, argsDeposit, argsBorrow, argsAssetBalances)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -50,48 +51,48 @@ func CmdCreateUser() *cobra.Command {
 	return cmd
 }
 
-func CmdUpdateUser() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "update-user [id] [collateral] [deposit] [borrow]",
-		Short: "Update a user",
-		Args:  cobra.ExactArgs(4),
-		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			id, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-			argsCollateral := []bool{}
-			argsDeposit := []*types.Deposit{}
-			argsBorrow := []*types.Borrow{}
-			// argCollateral, err := cast.ToBoolE(args[1])
-			// if err != nil {
-			// 	return err
-			// }
+// func CmdUpdateUser() *cobra.Command {
+// 	cmd := &cobra.Command{
+// 		Use:   "update-user [id] [collateral] [deposit] [borrow]",
+// 		Short: "Update a user",
+// 		Args:  cobra.ExactArgs(4),
+// 		RunE: func(cmd *cobra.Command, args []string) (err error) {
+// 			id, err := strconv.ParseUint(args[0], 10, 64)
+// 			if err != nil {
+// 				return err
+// 			}
+// 			argsCollateral := []bool{}
+// 			argsDeposit := []*types.Deposit{}
+// 			argsBorrow := []*types.Borrow{}
+// 			// argCollateral, err := cast.ToBoolE(args[1])
+// 			// if err != nil {
+// 			// 	return err
+// 			// }
 
-			// argDeposit, err := cast.ToInt32E(args[2])
-			// if err != nil {
-			// 	return err
-			// }
+// 			// argDeposit, err := cast.ToInt32E(args[2])
+// 			// if err != nil {
+// 			// 	return err
+// 			// }
 
-			// argBorrow := args[3]
+// 			// argBorrow := args[3]
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
+// 			clientCtx, err := client.GetClientTxContext(cmd)
+// 			if err != nil {
+// 				return err
+// 			}
 
-			msg := types.NewMsgUpdateUser(clientCtx.GetFromAddress().String(), id, argsCollateral, argsDeposit, argsBorrow)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
+// 			msg := types.NewMsgUpdateUser(clientCtx.GetFromAddress().String(), id, argsCollateral, argsDeposit, argsBorrow)
+// 			if err := msg.ValidateBasic(); err != nil {
+// 				return err
+// 			}
+// 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+// 		},
+// 	}
 
-	flags.AddTxFlagsToCmd(cmd)
+// 	flags.AddTxFlagsToCmd(cmd)
 
-	return cmd
-}
+// 	return cmd
+// }
 
 func CmdDeleteUser() *cobra.Command {
 	cmd := &cobra.Command{

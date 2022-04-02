@@ -234,6 +234,7 @@ export interface WayneUser {
     collateral?: boolean[];
     deposit?: WayneDeposit[];
     borrow?: WayneBorrow[];
+    assetBalances?: number[];
 }
 export declare type QueryParamsType = Record<string | number, any>;
 export declare type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
