@@ -21,6 +21,57 @@ func (k msgServer) CreateBorrow(goCtx context.Context, msg *types.MsgCreateBorro
 		Denom:       msg.Denom,
 	}
 
+	// PREPARE THE TOKENS FOR BORROWIN
+	coinsWithDenom, err := sdk.ParseCoinsNormalized(fmt.Sprint(msg.Amount, msg.Denom))
+	if err != nil {
+		return nil, err
+	}
+
+	// GET INFO ABOUT
+	getUser := k.GetAllUser(ctx)
+	var queryUser types.User
+	for _, user := range getUser {
+		if user.Creator == msg.Creator {
+			queryUser = user
+		}
+	}
+
+	for i, borrow := range queryUser.Borrow {
+		if borrow.Denom == msg.Denom {
+			queryUser.Borrow[i].Amount = queryUser.Borrow[i].Amount + msg.Amount
+		}
+	}
+	k.SetUser(ctx, queryUser)
+
+	creatorAddress, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.bankKeeper.MintCoins(ctx, types.ModuleName, coinsWithDenom)
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, creatorAddress, coinsWithDenom)
+	if err != nil {
+		return nil, err
+	}
+
+	poolList := k.GetAllPool(ctx)
+	var queryPool types.Pool
+	for _, pool := range poolList {
+		if pool.Asset == msg.Asset {
+			queryPool = pool
+		}
+	}
+
+	queryPool.BorrowBalance = queryPool.BorrowBalance + msg.Amount
+	k.SetPool(ctx, queryPool)
+
+	// TOOD: ADD COLLATERAL LOGIC WHEN BORROWING
+	// TODO: USER CAN ONLY GET "collateral_factor" AMOUNT OF THE TOKEN THAT THEY DEPOSIT
+
 	id := k.AppendBorrow(
 		ctx,
 		borrow,
