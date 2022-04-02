@@ -2,6 +2,7 @@ import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../wayne/params";
 import { Pool } from "../wayne/pool";
 import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
+import { LoadPoolResponse } from "../wayne/load_pool_response";
 import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
@@ -26,6 +27,13 @@ export interface QueryAllPoolRequest {
 }
 export interface QueryAllPoolResponse {
     Pool: Pool[];
+    pagination: PageResponse | undefined;
+}
+export interface QueryLoadPoolRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryLoadPoolResponse {
+    LoadPoolResponse: LoadPoolResponse[];
     pagination: PageResponse | undefined;
 }
 export interface QueryGetDepositRequest {
@@ -80,6 +88,19 @@ export interface QueryAllInterfaceAprResponse {
     InterfaceApr: InterfaceApr[];
     pagination: PageResponse | undefined;
 }
+export interface QueryGetLoadPoolResponseRequest {
+    id: number;
+}
+export interface QueryGetLoadPoolResponseResponse {
+    LoadPoolResponse: LoadPoolResponse | undefined;
+}
+export interface QueryAllLoadPoolResponseRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryAllLoadPoolResponseResponse {
+    LoadPoolResponse: LoadPoolResponse[];
+    pagination: PageResponse | undefined;
+}
 export declare const QueryParamsRequest: {
     encode(_: QueryParamsRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryParamsRequest;
@@ -121,6 +142,20 @@ export declare const QueryAllPoolResponse: {
     fromJSON(object: any): QueryAllPoolResponse;
     toJSON(message: QueryAllPoolResponse): unknown;
     fromPartial(object: DeepPartial<QueryAllPoolResponse>): QueryAllPoolResponse;
+};
+export declare const QueryLoadPoolRequest: {
+    encode(message: QueryLoadPoolRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryLoadPoolRequest;
+    fromJSON(object: any): QueryLoadPoolRequest;
+    toJSON(message: QueryLoadPoolRequest): unknown;
+    fromPartial(object: DeepPartial<QueryLoadPoolRequest>): QueryLoadPoolRequest;
+};
+export declare const QueryLoadPoolResponse: {
+    encode(message: QueryLoadPoolResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryLoadPoolResponse;
+    fromJSON(object: any): QueryLoadPoolResponse;
+    toJSON(message: QueryLoadPoolResponse): unknown;
+    fromPartial(object: DeepPartial<QueryLoadPoolResponse>): QueryLoadPoolResponse;
 };
 export declare const QueryGetDepositRequest: {
     encode(message: QueryGetDepositRequest, writer?: Writer): Writer;
@@ -234,6 +269,34 @@ export declare const QueryAllInterfaceAprResponse: {
     toJSON(message: QueryAllInterfaceAprResponse): unknown;
     fromPartial(object: DeepPartial<QueryAllInterfaceAprResponse>): QueryAllInterfaceAprResponse;
 };
+export declare const QueryGetLoadPoolResponseRequest: {
+    encode(message: QueryGetLoadPoolResponseRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetLoadPoolResponseRequest;
+    fromJSON(object: any): QueryGetLoadPoolResponseRequest;
+    toJSON(message: QueryGetLoadPoolResponseRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetLoadPoolResponseRequest>): QueryGetLoadPoolResponseRequest;
+};
+export declare const QueryGetLoadPoolResponseResponse: {
+    encode(message: QueryGetLoadPoolResponseResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetLoadPoolResponseResponse;
+    fromJSON(object: any): QueryGetLoadPoolResponseResponse;
+    toJSON(message: QueryGetLoadPoolResponseResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetLoadPoolResponseResponse>): QueryGetLoadPoolResponseResponse;
+};
+export declare const QueryAllLoadPoolResponseRequest: {
+    encode(message: QueryAllLoadPoolResponseRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllLoadPoolResponseRequest;
+    fromJSON(object: any): QueryAllLoadPoolResponseRequest;
+    toJSON(message: QueryAllLoadPoolResponseRequest): unknown;
+    fromPartial(object: DeepPartial<QueryAllLoadPoolResponseRequest>): QueryAllLoadPoolResponseRequest;
+};
+export declare const QueryAllLoadPoolResponseResponse: {
+    encode(message: QueryAllLoadPoolResponseResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllLoadPoolResponseResponse;
+    fromJSON(object: any): QueryAllLoadPoolResponseResponse;
+    toJSON(message: QueryAllLoadPoolResponseResponse): unknown;
+    fromPartial(object: DeepPartial<QueryAllLoadPoolResponseResponse>): QueryAllLoadPoolResponseResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
@@ -242,6 +305,7 @@ export interface Query {
     Pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse>;
     /** Queries a list of Pool items. */
     PoolAll(request: QueryAllPoolRequest): Promise<QueryAllPoolResponse>;
+    PoolLoad(request: QueryLoadPoolRequest): Promise<QueryLoadPoolResponse>;
     /** Queries a Deposit by id. */
     Deposit(request: QueryGetDepositRequest): Promise<QueryGetDepositResponse>;
     /** Queries a list of Deposit items. */
@@ -258,6 +322,10 @@ export interface Query {
     InterfaceApr(request: QueryGetInterfaceAprRequest): Promise<QueryGetInterfaceAprResponse>;
     /** Queries a list of InterfaceApr items. */
     InterfaceAprAll(request: QueryAllInterfaceAprRequest): Promise<QueryAllInterfaceAprResponse>;
+    /** Queries a LoadPoolResponse by id. */
+    LoadPoolResponse(request: QueryGetLoadPoolResponseRequest): Promise<QueryGetLoadPoolResponseResponse>;
+    /** Queries a list of LoadPoolResponse items. */
+    LoadPoolResponseAll(request: QueryAllLoadPoolResponseRequest): Promise<QueryAllLoadPoolResponseResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
@@ -265,6 +333,7 @@ export declare class QueryClientImpl implements Query {
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
     Pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse>;
     PoolAll(request: QueryAllPoolRequest): Promise<QueryAllPoolResponse>;
+    PoolLoad(request: QueryLoadPoolRequest): Promise<QueryLoadPoolResponse>;
     Deposit(request: QueryGetDepositRequest): Promise<QueryGetDepositResponse>;
     DepositAll(request: QueryAllDepositRequest): Promise<QueryAllDepositResponse>;
     Borrow(request: QueryGetBorrowRequest): Promise<QueryGetBorrowResponse>;
@@ -273,6 +342,8 @@ export declare class QueryClientImpl implements Query {
     UserAll(request: QueryAllUserRequest): Promise<QueryAllUserResponse>;
     InterfaceApr(request: QueryGetInterfaceAprRequest): Promise<QueryGetInterfaceAprResponse>;
     InterfaceAprAll(request: QueryAllInterfaceAprRequest): Promise<QueryAllInterfaceAprResponse>;
+    LoadPoolResponse(request: QueryGetLoadPoolResponseRequest): Promise<QueryGetLoadPoolResponseResponse>;
+    LoadPoolResponseAll(request: QueryAllLoadPoolResponseRequest): Promise<QueryAllLoadPoolResponseResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

@@ -6,6 +6,7 @@ import "wayne/deposit.proto";
 import "wayne/borrow.proto";
 import "wayne/user.proto";
 import "wayne/interface_apr.proto";
+import "wayne/load_pool_response.proto";
 // this line is used by starport scaffolding # proto/tx/import
 
 option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
@@ -27,6 +28,9 @@ rpc CreateUser(MsgCreateUser) returns (MsgCreateUserResponse);
 rpc CreateInterfaceApr(MsgCreateInterfaceApr) returns (MsgCreateInterfaceAprResponse);
   rpc UpdateInterfaceApr(MsgUpdateInterfaceApr) returns (MsgUpdateInterfaceAprResponse);
   rpc DeleteInterfaceApr(MsgDeleteInterfaceApr) returns (MsgDeleteInterfaceAprResponse);
+rpc CreateLoadPoolResponse(MsgCreateLoadPoolResponse) returns (MsgCreateLoadPoolResponseResponse);
+  rpc UpdateLoadPoolResponse(MsgUpdateLoadPoolResponse) returns (MsgUpdateLoadPoolResponseResponse);
+  rpc DeleteLoadPoolResponse(MsgDeleteLoadPoolResponse) returns (MsgDeleteLoadPoolResponseResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -35,9 +39,10 @@ message MsgCreatePool {
   string asset = 2;
   string denom = 3;
   int32 collatoralFactor = 4;
-  int32 depth = 5;
-  repeated InterfaceApr aPR = 6;
-  repeated User users = 7;
+  int32 depositBalance = 5;
+  int32 borrowBalance = 6;
+  repeated InterfaceApr APR = 7;
+  repeated User users = 8;
 }
 
 message MsgCreatePoolResponse {
@@ -50,9 +55,10 @@ message MsgUpdatePool {
   string asset = 3;
   string denom = 4;
   int32 collatoralFactor = 5;
-  int32 depth = 6;
-  repeated InterfaceApr aPR = 7;
-  repeated User users = 8;
+  int32 depositBalance = 6;
+  int32 borrowBalance = 7;
+  repeated InterfaceApr aPR = 8;
+  repeated User users = 9;
 }
 
 message MsgUpdatePoolResponse {}
@@ -179,5 +185,37 @@ message MsgDeleteInterfaceApr {
 }
 
 message MsgDeleteInterfaceAprResponse {}
+
+message MsgCreateLoadPoolResponse {
+  string creator = 1;
+  string asset = 2;
+  int32 collatoralFactor = 3;
+  int32 liquidity = 4;
+  int32 depositApy = 5;
+  int32 borrowApy = 6;
+}
+
+message MsgCreateLoadPoolResponseResponse {
+  uint64 id = 1;
+}
+
+message MsgUpdateLoadPoolResponse {
+  string creator = 1;
+  uint64 id = 2;
+  string asset = 3;
+  int32 collatoralFactor = 4;
+  int32 liquidity = 5;
+  int32 depositApy = 6;
+  int32 borrowApy = 7;
+}
+
+message MsgUpdateLoadPoolResponseResponse {}
+
+message MsgDeleteLoadPoolResponse {
+  string creator = 1;
+  uint64 id = 2;
+}
+
+message MsgDeleteLoadPoolResponseResponse {}
 
 // this line is used by starport scaffolding # proto/tx/message

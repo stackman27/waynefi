@@ -84,6 +84,18 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgDeleteInterfaceApr int = 100
 
+	opWeightMsgCreateLoadPoolResponse = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgCreateLoadPoolResponse int = 100
+
+	opWeightMsgUpdateLoadPoolResponse = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgUpdateLoadPoolResponse int = 100
+
+	opWeightMsgDeleteLoadPoolResponse = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgDeleteLoadPoolResponse int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -149,6 +161,17 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 			},
 		},
 		InterfaceAprCount: 2,
+		LoadPoolResponseList: []types.LoadPoolResponse{
+			{
+				Id:      0,
+				Creator: sample.AccAddress(),
+			},
+			{
+				Id:      1,
+				Creator: sample.AccAddress(),
+			},
+		},
+		LoadPoolResponseCount: 2,
 		// this line is used by starport scaffolding # simapp/module/genesisState
 	}
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&wayneGenesis)
@@ -335,6 +358,39 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgDeleteInterfaceApr,
 		waynesimulation.SimulateMsgDeleteInterfaceApr(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgCreateLoadPoolResponse int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgCreateLoadPoolResponse, &weightMsgCreateLoadPoolResponse, nil,
+		func(_ *rand.Rand) {
+			weightMsgCreateLoadPoolResponse = defaultWeightMsgCreateLoadPoolResponse
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgCreateLoadPoolResponse,
+		waynesimulation.SimulateMsgCreateLoadPoolResponse(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgUpdateLoadPoolResponse int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgUpdateLoadPoolResponse, &weightMsgUpdateLoadPoolResponse, nil,
+		func(_ *rand.Rand) {
+			weightMsgUpdateLoadPoolResponse = defaultWeightMsgUpdateLoadPoolResponse
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgUpdateLoadPoolResponse,
+		waynesimulation.SimulateMsgUpdateLoadPoolResponse(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgDeleteLoadPoolResponse int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgDeleteLoadPoolResponse, &weightMsgDeleteLoadPoolResponse, nil,
+		func(_ *rand.Rand) {
+			weightMsgDeleteLoadPoolResponse = defaultWeightMsgDeleteLoadPoolResponse
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgDeleteLoadPoolResponse,
+		waynesimulation.SimulateMsgDeleteLoadPoolResponse(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation

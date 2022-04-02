@@ -44,6 +44,13 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// Set interfaceApr count
 	k.SetInterfaceAprCount(ctx, genState.InterfaceAprCount)
+	// Set all the loadPoolResponse
+	for _, elem := range genState.LoadPoolResponseList {
+		k.SetLoadPoolResponse(ctx, elem)
+	}
+
+	// Set loadPoolResponse count
+	k.SetLoadPoolResponseCount(ctx, genState.LoadPoolResponseCount)
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }
@@ -63,6 +70,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.UserCount = k.GetUserCount(ctx)
 	genesis.InterfaceAprList = k.GetAllInterfaceApr(ctx)
 	genesis.InterfaceAprCount = k.GetInterfaceAprCount(ctx)
+	genesis.LoadPoolResponseList = k.GetAllLoadPoolResponse(ctx)
+	genesis.LoadPoolResponseCount = k.GetLoadPoolResponseCount(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

@@ -59,6 +59,15 @@ func TestGenesis(t *testing.T) {
 			},
 		},
 		InterfaceAprCount: 2,
+		LoadPoolResponseList: []types.LoadPoolResponse{
+			{
+				Id: 0,
+			},
+			{
+				Id: 1,
+			},
+		},
+		LoadPoolResponseCount: 2,
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -80,5 +89,7 @@ func TestGenesis(t *testing.T) {
 	require.Equal(t, genesisState.UserCount, got.UserCount)
 	require.ElementsMatch(t, genesisState.InterfaceAprList, got.InterfaceAprList)
 	require.Equal(t, genesisState.InterfaceAprCount, got.InterfaceAprCount)
+	require.ElementsMatch(t, genesisState.LoadPoolResponseList, got.LoadPoolResponseList)
+	require.Equal(t, genesisState.LoadPoolResponseCount, got.LoadPoolResponseCount)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

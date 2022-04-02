@@ -45,3 +45,8 @@ const (
 	InterfaceAprKey      = "InterfaceApr-value-"
 	InterfaceAprCountKey = "InterfaceApr-count-"
 )
+
+const (
+	LoadPoolResponseKey      = "LoadPoolResponse-value-"
+	LoadPoolResponseCountKey = "LoadPoolResponse-count-"
+)

@@ -9,47 +9,43 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-func (k msgServer) CreatePool(goCtx context.Context, msg *types.MsgCreatePool) (*types.MsgCreatePoolResponse, error) {
+func (k msgServer) CreateLoadPoolResponse(goCtx context.Context, msg *types.MsgCreateLoadPoolResponse) (*types.MsgCreateLoadPoolResponseResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	var pool = types.Pool{
+	var loadPoolResponse = types.LoadPoolResponse{
 		Creator:          msg.Creator,
 		Asset:            msg.Asset,
-		Denom:            msg.Denom,
 		CollatoralFactor: msg.CollatoralFactor,
-		DepositBalance:   msg.DepositBalance,
-		BorrowBalance:    msg.BorrowBalance,
-		APR:              msg.APR,
-		Users:            msg.Users,
+		Liquidity:        msg.Liquidity,
+		DepositApy:       msg.DepositApy,
+		BorrowApy:        msg.BorrowApy,
 	}
 
-	id := k.AppendPool(
+	id := k.AppendLoadPoolResponse(
 		ctx,
-		pool,
+		loadPoolResponse,
 	)
 
-	return &types.MsgCreatePoolResponse{
+	return &types.MsgCreateLoadPoolResponseResponse{
 		Id: id,
 	}, nil
 }
 
-func (k msgServer) UpdatePool(goCtx context.Context, msg *types.MsgUpdatePool) (*types.MsgUpdatePoolResponse, error) {
+func (k msgServer) UpdateLoadPoolResponse(goCtx context.Context, msg *types.MsgUpdateLoadPoolResponse) (*types.MsgUpdateLoadPoolResponseResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	var pool = types.Pool{
+	var loadPoolResponse = types.LoadPoolResponse{
 		Creator:          msg.Creator,
 		Id:               msg.Id,
 		Asset:            msg.Asset,
-		Denom:            msg.Denom,
 		CollatoralFactor: msg.CollatoralFactor,
-		DepositBalance:   msg.DepositBalance,
-		BorrowBalance:    msg.BorrowBalance,
-		APR:              msg.APR,
-		Users:            msg.Users,
+		Liquidity:        msg.Liquidity,
+		DepositApy:       msg.DepositApy,
+		BorrowApy:        msg.BorrowApy,
 	}
 
 	// Checks that the element exists
-	val, found := k.GetPool(ctx, msg.Id)
+	val, found := k.GetLoadPoolResponse(ctx, msg.Id)
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
@@ -59,16 +55,16 @@ func (k msgServer) UpdatePool(goCtx context.Context, msg *types.MsgUpdatePool) (
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	k.SetPool(ctx, pool)
+	k.SetLoadPoolResponse(ctx, loadPoolResponse)
 
-	return &types.MsgUpdatePoolResponse{}, nil
+	return &types.MsgUpdateLoadPoolResponseResponse{}, nil
 }
 
-func (k msgServer) DeletePool(goCtx context.Context, msg *types.MsgDeletePool) (*types.MsgDeletePoolResponse, error) {
+func (k msgServer) DeleteLoadPoolResponse(goCtx context.Context, msg *types.MsgDeleteLoadPoolResponse) (*types.MsgDeleteLoadPoolResponseResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Checks that the element exists
-	val, found := k.GetPool(ctx, msg.Id)
+	val, found := k.GetLoadPoolResponse(ctx, msg.Id)
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
@@ -78,7 +74,7 @@ func (k msgServer) DeletePool(goCtx context.Context, msg *types.MsgDeletePool) (
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	k.RemovePool(ctx, msg.Id)
+	k.RemoveLoadPoolResponse(ctx, msg.Id)
 
-	return &types.MsgDeletePoolResponse{}, nil
+	return &types.MsgDeleteLoadPoolResponseResponse{}, nil
 }

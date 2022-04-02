@@ -227,6 +227,49 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryPoolLoad
+         * @request GET:/cosmonaut/wayne/wayne/loadPools
+         */
+        this.queryPoolLoad = (query, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/loadPools`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryLoadPoolResponseAll
+         * @summary Queries a list of LoadPoolResponse items.
+         * @request GET:/cosmonaut/wayne/wayne/load_pool_response
+         */
+        this.queryLoadPoolResponseAll = (query, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/load_pool_response`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryLoadPoolResponse
+         * @summary Queries a LoadPoolResponse by id.
+         * @request GET:/cosmonaut/wayne/wayne/load_pool_response/{id}
+         */
+        this.queryLoadPoolResponse = (id, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/load_pool_response/${id}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryParams
          * @summary Parameters queries the parameters of the module.
          * @request GET:/cosmonaut/wayne/wayne/params

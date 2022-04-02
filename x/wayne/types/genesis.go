@@ -10,11 +10,12 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default Capability genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		PoolList:         []Pool{},
-		DepositList:      []Deposit{},
-		BorrowList:       []Borrow{},
-		UserList:         []User{},
-		InterfaceAprList: []InterfaceApr{},
+		PoolList:             []Pool{},
+		DepositList:          []Deposit{},
+		BorrowList:           []Borrow{},
+		UserList:             []User{},
+		InterfaceAprList:     []InterfaceApr{},
+		LoadPoolResponseList: []LoadPoolResponse{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -82,6 +83,18 @@ func (gs GenesisState) Validate() error {
 			return fmt.Errorf("interfaceApr id should be lower or equal than the last id")
 		}
 		interfaceAprIdMap[elem.Id] = true
+	}
+	// Check for duplicated ID in loadPoolResponse
+	loadPoolResponseIdMap := make(map[uint64]bool)
+	loadPoolResponseCount := gs.GetLoadPoolResponseCount()
+	for _, elem := range gs.LoadPoolResponseList {
+		if _, ok := loadPoolResponseIdMap[elem.Id]; ok {
+			return fmt.Errorf("duplicated id for loadPoolResponse")
+		}
+		if elem.Id >= loadPoolResponseCount {
+			return fmt.Errorf("loadPoolResponse id should be lower or equal than the last id")
+		}
+		loadPoolResponseIdMap[elem.Id] = true
 	}
 	// this line is used by starport scaffolding # genesis/types/validate
 

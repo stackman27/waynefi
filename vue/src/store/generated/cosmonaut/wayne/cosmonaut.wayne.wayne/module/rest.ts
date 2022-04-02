@@ -121,6 +121,25 @@ export interface WayneInterfaceApr {
   creator?: string;
 }
 
+export interface WayneLoadPoolResponse {
+  /** @format uint64 */
+  id?: string;
+  asset?: string;
+
+  /** @format int32 */
+  collatoralFactor?: number;
+
+  /** @format int32 */
+  liquidity?: number;
+
+  /** @format int32 */
+  depositApy?: number;
+
+  /** @format int32 */
+  borrowApy?: number;
+  creator?: string;
+}
+
 export interface WayneMsgCreateBorrowResponse {
   /** @format uint64 */
   id?: string;
@@ -132,6 +151,11 @@ export interface WayneMsgCreateDepositResponse {
 }
 
 export interface WayneMsgCreateInterfaceAprResponse {
+  /** @format uint64 */
+  id?: string;
+}
+
+export interface WayneMsgCreateLoadPoolResponseResponse {
   /** @format uint64 */
   id?: string;
 }
@@ -152,6 +176,8 @@ export type WayneMsgDeleteDepositResponse = object;
 
 export type WayneMsgDeleteInterfaceAprResponse = object;
 
+export type WayneMsgDeleteLoadPoolResponseResponse = object;
+
 export type WayneMsgDeletePoolResponse = object;
 
 export type WayneMsgDeleteUserResponse = object;
@@ -161,6 +187,8 @@ export type WayneMsgUpdateBorrowResponse = object;
 export type WayneMsgUpdateDepositResponse = object;
 
 export type WayneMsgUpdateInterfaceAprResponse = object;
+
+export type WayneMsgUpdateLoadPoolResponseResponse = object;
 
 export type WayneMsgUpdatePoolResponse = object;
 
@@ -181,7 +209,10 @@ export interface WaynePool {
   collatoralFactor?: number;
 
   /** @format int32 */
-  depth?: number;
+  depositBalance?: number;
+
+  /** @format int32 */
+  borrowBalance?: number;
   aPR?: WayneInterfaceApr[];
   users?: WayneUser[];
   creator?: string;
@@ -219,6 +250,21 @@ export interface WayneQueryAllDepositResponse {
 
 export interface WayneQueryAllInterfaceAprResponse {
   InterfaceApr?: WayneInterfaceApr[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface WayneQueryAllLoadPoolResponseResponse {
+  LoadPoolResponse?: WayneLoadPoolResponse[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -274,12 +320,31 @@ export interface WayneQueryGetInterfaceAprResponse {
   InterfaceApr?: WayneInterfaceApr;
 }
 
+export interface WayneQueryGetLoadPoolResponseResponse {
+  LoadPoolResponse?: WayneLoadPoolResponse;
+}
+
 export interface WayneQueryGetPoolResponse {
   Pool?: WaynePool;
 }
 
 export interface WayneQueryGetUserResponse {
   User?: WayneUser;
+}
+
+export interface WayneQueryLoadPoolResponse {
+  LoadPoolResponse?: WayneLoadPoolResponse[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
 }
 
 /**
@@ -618,6 +683,73 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryInterfaceApr = (id: string, params: RequestParams = {}) =>
     this.request<WayneQueryGetInterfaceAprResponse, RpcStatus>({
       path: `/cosmonaut/wayne/wayne/interface_apr/${id}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPoolLoad
+   * @request GET:/cosmonaut/wayne/wayne/loadPools
+   */
+  queryPoolLoad = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<WayneQueryLoadPoolResponse, RpcStatus>({
+      path: `/cosmonaut/wayne/wayne/loadPools`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryLoadPoolResponseAll
+   * @summary Queries a list of LoadPoolResponse items.
+   * @request GET:/cosmonaut/wayne/wayne/load_pool_response
+   */
+  queryLoadPoolResponseAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<WayneQueryAllLoadPoolResponseResponse, RpcStatus>({
+      path: `/cosmonaut/wayne/wayne/load_pool_response`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryLoadPoolResponse
+   * @summary Queries a LoadPoolResponse by id.
+   * @request GET:/cosmonaut/wayne/wayne/load_pool_response/{id}
+   */
+  queryLoadPoolResponse = (id: string, params: RequestParams = {}) =>
+    this.request<WayneQueryGetLoadPoolResponseResponse, RpcStatus>({
+      path: `/cosmonaut/wayne/wayne/load_pool_response/${id}`,
       method: "GET",
       format: "json",
       ...params,

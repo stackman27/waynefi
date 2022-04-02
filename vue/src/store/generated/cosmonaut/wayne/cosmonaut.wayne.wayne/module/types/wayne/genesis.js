@@ -7,6 +7,7 @@ import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
 import { InterfaceApr } from "../wayne/interface_apr";
+import { LoadPoolResponse } from "../wayne/load_pool_response";
 export const protobufPackage = "cosmonaut.wayne.wayne";
 const baseGenesisState = {
     poolCount: 0,
@@ -14,6 +15,7 @@ const baseGenesisState = {
     borrowCount: 0,
     userCount: 0,
     interfaceAprCount: 0,
+    loadPoolResponseCount: 0,
 };
 export const GenesisState = {
     encode(message, writer = Writer.create()) {
@@ -50,6 +52,12 @@ export const GenesisState = {
         if (message.interfaceAprCount !== 0) {
             writer.uint32(88).uint64(message.interfaceAprCount);
         }
+        for (const v of message.loadPoolResponseList) {
+            LoadPoolResponse.encode(v, writer.uint32(98).fork()).ldelim();
+        }
+        if (message.loadPoolResponseCount !== 0) {
+            writer.uint32(104).uint64(message.loadPoolResponseCount);
+        }
         return writer;
     },
     decode(input, length) {
@@ -61,6 +69,7 @@ export const GenesisState = {
         message.borrowList = [];
         message.userList = [];
         message.interfaceAprList = [];
+        message.loadPoolResponseList = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -97,6 +106,12 @@ export const GenesisState = {
                 case 11:
                     message.interfaceAprCount = longToNumber(reader.uint64());
                     break;
+                case 12:
+                    message.loadPoolResponseList.push(LoadPoolResponse.decode(reader, reader.uint32()));
+                    break;
+                case 13:
+                    message.loadPoolResponseCount = longToNumber(reader.uint64());
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -111,6 +126,7 @@ export const GenesisState = {
         message.borrowList = [];
         message.userList = [];
         message.interfaceAprList = [];
+        message.loadPoolResponseList = [];
         if (object.params !== undefined && object.params !== null) {
             message.params = Params.fromJSON(object.params);
         }
@@ -174,6 +190,19 @@ export const GenesisState = {
         else {
             message.interfaceAprCount = 0;
         }
+        if (object.loadPoolResponseList !== undefined &&
+            object.loadPoolResponseList !== null) {
+            for (const e of object.loadPoolResponseList) {
+                message.loadPoolResponseList.push(LoadPoolResponse.fromJSON(e));
+            }
+        }
+        if (object.loadPoolResponseCount !== undefined &&
+            object.loadPoolResponseCount !== null) {
+            message.loadPoolResponseCount = Number(object.loadPoolResponseCount);
+        }
+        else {
+            message.loadPoolResponseCount = 0;
+        }
         return message;
     },
     toJSON(message) {
@@ -218,6 +247,14 @@ export const GenesisState = {
         }
         message.interfaceAprCount !== undefined &&
             (obj.interfaceAprCount = message.interfaceAprCount);
+        if (message.loadPoolResponseList) {
+            obj.loadPoolResponseList = message.loadPoolResponseList.map((e) => e ? LoadPoolResponse.toJSON(e) : undefined);
+        }
+        else {
+            obj.loadPoolResponseList = [];
+        }
+        message.loadPoolResponseCount !== undefined &&
+            (obj.loadPoolResponseCount = message.loadPoolResponseCount);
         return obj;
     },
     fromPartial(object) {
@@ -227,6 +264,7 @@ export const GenesisState = {
         message.borrowList = [];
         message.userList = [];
         message.interfaceAprList = [];
+        message.loadPoolResponseList = [];
         if (object.params !== undefined && object.params !== null) {
             message.params = Params.fromPartial(object.params);
         }
@@ -289,6 +327,19 @@ export const GenesisState = {
         }
         else {
             message.interfaceAprCount = 0;
+        }
+        if (object.loadPoolResponseList !== undefined &&
+            object.loadPoolResponseList !== null) {
+            for (const e of object.loadPoolResponseList) {
+                message.loadPoolResponseList.push(LoadPoolResponse.fromPartial(e));
+            }
+        }
+        if (object.loadPoolResponseCount !== undefined &&
+            object.loadPoolResponseCount !== null) {
+            message.loadPoolResponseCount = object.loadPoolResponseCount;
+        }
+        else {
+            message.loadPoolResponseCount = 0;
         }
         return message;
     },

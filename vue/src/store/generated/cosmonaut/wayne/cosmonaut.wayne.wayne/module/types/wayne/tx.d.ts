@@ -9,8 +9,9 @@ export interface MsgCreatePool {
     asset: string;
     denom: string;
     collatoralFactor: number;
-    depth: number;
-    aPR: InterfaceApr[];
+    depositBalance: number;
+    borrowBalance: number;
+    APR: InterfaceApr[];
     users: User[];
 }
 export interface MsgCreatePoolResponse {
@@ -22,7 +23,8 @@ export interface MsgUpdatePool {
     asset: string;
     denom: string;
     collatoralFactor: number;
-    depth: number;
+    depositBalance: number;
+    borrowBalance: number;
     aPR: InterfaceApr[];
     users: User[];
 }
@@ -133,6 +135,34 @@ export interface MsgDeleteInterfaceApr {
     id: number;
 }
 export interface MsgDeleteInterfaceAprResponse {
+}
+export interface MsgCreateLoadPoolResponse {
+    creator: string;
+    asset: string;
+    collatoralFactor: number;
+    liquidity: number;
+    depositApy: number;
+    borrowApy: number;
+}
+export interface MsgCreateLoadPoolResponseResponse {
+    id: number;
+}
+export interface MsgUpdateLoadPoolResponse {
+    creator: string;
+    id: number;
+    asset: string;
+    collatoralFactor: number;
+    liquidity: number;
+    depositApy: number;
+    borrowApy: number;
+}
+export interface MsgUpdateLoadPoolResponseResponse {
+}
+export interface MsgDeleteLoadPoolResponse {
+    creator: string;
+    id: number;
+}
+export interface MsgDeleteLoadPoolResponseResponse {
 }
 export declare const MsgCreatePool: {
     encode(message: MsgCreatePool, writer?: Writer): Writer;
@@ -344,6 +374,48 @@ export declare const MsgDeleteInterfaceAprResponse: {
     toJSON(_: MsgDeleteInterfaceAprResponse): unknown;
     fromPartial(_: DeepPartial<MsgDeleteInterfaceAprResponse>): MsgDeleteInterfaceAprResponse;
 };
+export declare const MsgCreateLoadPoolResponse: {
+    encode(message: MsgCreateLoadPoolResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateLoadPoolResponse;
+    fromJSON(object: any): MsgCreateLoadPoolResponse;
+    toJSON(message: MsgCreateLoadPoolResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCreateLoadPoolResponse>): MsgCreateLoadPoolResponse;
+};
+export declare const MsgCreateLoadPoolResponseResponse: {
+    encode(message: MsgCreateLoadPoolResponseResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateLoadPoolResponseResponse;
+    fromJSON(object: any): MsgCreateLoadPoolResponseResponse;
+    toJSON(message: MsgCreateLoadPoolResponseResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCreateLoadPoolResponseResponse>): MsgCreateLoadPoolResponseResponse;
+};
+export declare const MsgUpdateLoadPoolResponse: {
+    encode(message: MsgUpdateLoadPoolResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateLoadPoolResponse;
+    fromJSON(object: any): MsgUpdateLoadPoolResponse;
+    toJSON(message: MsgUpdateLoadPoolResponse): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateLoadPoolResponse>): MsgUpdateLoadPoolResponse;
+};
+export declare const MsgUpdateLoadPoolResponseResponse: {
+    encode(_: MsgUpdateLoadPoolResponseResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateLoadPoolResponseResponse;
+    fromJSON(_: any): MsgUpdateLoadPoolResponseResponse;
+    toJSON(_: MsgUpdateLoadPoolResponseResponse): unknown;
+    fromPartial(_: DeepPartial<MsgUpdateLoadPoolResponseResponse>): MsgUpdateLoadPoolResponseResponse;
+};
+export declare const MsgDeleteLoadPoolResponse: {
+    encode(message: MsgDeleteLoadPoolResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgDeleteLoadPoolResponse;
+    fromJSON(object: any): MsgDeleteLoadPoolResponse;
+    toJSON(message: MsgDeleteLoadPoolResponse): unknown;
+    fromPartial(object: DeepPartial<MsgDeleteLoadPoolResponse>): MsgDeleteLoadPoolResponse;
+};
+export declare const MsgDeleteLoadPoolResponseResponse: {
+    encode(_: MsgDeleteLoadPoolResponseResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgDeleteLoadPoolResponseResponse;
+    fromJSON(_: any): MsgDeleteLoadPoolResponseResponse;
+    toJSON(_: MsgDeleteLoadPoolResponseResponse): unknown;
+    fromPartial(_: DeepPartial<MsgDeleteLoadPoolResponseResponse>): MsgDeleteLoadPoolResponseResponse;
+};
 /** Msg defines the Msg service. */
 export interface Msg {
     CreatePool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
@@ -360,8 +432,11 @@ export interface Msg {
     DeleteUser(request: MsgDeleteUser): Promise<MsgDeleteUserResponse>;
     CreateInterfaceApr(request: MsgCreateInterfaceApr): Promise<MsgCreateInterfaceAprResponse>;
     UpdateInterfaceApr(request: MsgUpdateInterfaceApr): Promise<MsgUpdateInterfaceAprResponse>;
-    /** this line is used by starport scaffolding # proto/tx/rpc */
     DeleteInterfaceApr(request: MsgDeleteInterfaceApr): Promise<MsgDeleteInterfaceAprResponse>;
+    CreateLoadPoolResponse(request: MsgCreateLoadPoolResponse): Promise<MsgCreateLoadPoolResponseResponse>;
+    UpdateLoadPoolResponse(request: MsgUpdateLoadPoolResponse): Promise<MsgUpdateLoadPoolResponseResponse>;
+    /** this line is used by starport scaffolding # proto/tx/rpc */
+    DeleteLoadPoolResponse(request: MsgDeleteLoadPoolResponse): Promise<MsgDeleteLoadPoolResponseResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -381,6 +456,9 @@ export declare class MsgClientImpl implements Msg {
     CreateInterfaceApr(request: MsgCreateInterfaceApr): Promise<MsgCreateInterfaceAprResponse>;
     UpdateInterfaceApr(request: MsgUpdateInterfaceApr): Promise<MsgUpdateInterfaceAprResponse>;
     DeleteInterfaceApr(request: MsgDeleteInterfaceApr): Promise<MsgDeleteInterfaceAprResponse>;
+    CreateLoadPoolResponse(request: MsgCreateLoadPoolResponse): Promise<MsgCreateLoadPoolResponseResponse>;
+    UpdateLoadPoolResponse(request: MsgUpdateLoadPoolResponse): Promise<MsgUpdateLoadPoolResponseResponse>;
+    DeleteLoadPoolResponse(request: MsgDeleteLoadPoolResponse): Promise<MsgDeleteLoadPoolResponseResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

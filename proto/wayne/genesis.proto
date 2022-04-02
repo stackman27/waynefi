@@ -8,6 +8,7 @@ import "wayne/deposit.proto";
 import "wayne/borrow.proto";
 import "wayne/user.proto";
 import "wayne/interface_apr.proto";
+import "wayne/load_pool_response.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
@@ -25,5 +26,7 @@ message GenesisState {
   uint64 userCount = 9;
   repeated InterfaceApr interfaceAprList = 10 [(gogoproto.nullable) = false];
   uint64 interfaceAprCount = 11;
+  repeated LoadPoolResponse loadPoolResponseList = 12 [(gogoproto.nullable) = false];
+  uint64 loadPoolResponseCount = 13;
   // this line is used by starport scaffolding # genesis/proto/state
 }

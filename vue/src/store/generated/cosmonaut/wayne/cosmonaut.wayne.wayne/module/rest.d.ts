@@ -93,6 +93,20 @@ export interface WayneInterfaceApr {
     timeApr?: number;
     creator?: string;
 }
+export interface WayneLoadPoolResponse {
+    /** @format uint64 */
+    id?: string;
+    asset?: string;
+    /** @format int32 */
+    collatoralFactor?: number;
+    /** @format int32 */
+    liquidity?: number;
+    /** @format int32 */
+    depositApy?: number;
+    /** @format int32 */
+    borrowApy?: number;
+    creator?: string;
+}
 export interface WayneMsgCreateBorrowResponse {
     /** @format uint64 */
     id?: string;
@@ -102,6 +116,10 @@ export interface WayneMsgCreateDepositResponse {
     id?: string;
 }
 export interface WayneMsgCreateInterfaceAprResponse {
+    /** @format uint64 */
+    id?: string;
+}
+export interface WayneMsgCreateLoadPoolResponseResponse {
     /** @format uint64 */
     id?: string;
 }
@@ -116,11 +134,13 @@ export interface WayneMsgCreateUserResponse {
 export declare type WayneMsgDeleteBorrowResponse = object;
 export declare type WayneMsgDeleteDepositResponse = object;
 export declare type WayneMsgDeleteInterfaceAprResponse = object;
+export declare type WayneMsgDeleteLoadPoolResponseResponse = object;
 export declare type WayneMsgDeletePoolResponse = object;
 export declare type WayneMsgDeleteUserResponse = object;
 export declare type WayneMsgUpdateBorrowResponse = object;
 export declare type WayneMsgUpdateDepositResponse = object;
 export declare type WayneMsgUpdateInterfaceAprResponse = object;
+export declare type WayneMsgUpdateLoadPoolResponseResponse = object;
 export declare type WayneMsgUpdatePoolResponse = object;
 export declare type WayneMsgUpdateUserResponse = object;
 /**
@@ -135,7 +155,9 @@ export interface WaynePool {
     /** @format int32 */
     collatoralFactor?: number;
     /** @format int32 */
-    depth?: number;
+    depositBalance?: number;
+    /** @format int32 */
+    borrowBalance?: number;
     aPR?: WayneInterfaceApr[];
     users?: WayneUser[];
     creator?: string;
@@ -168,6 +190,19 @@ export interface WayneQueryAllDepositResponse {
 }
 export interface WayneQueryAllInterfaceAprResponse {
     InterfaceApr?: WayneInterfaceApr[];
+    /**
+     * PageResponse is to be embedded in gRPC response messages where the
+     * corresponding request message has used PageRequest.
+     *
+     *  message SomeResponse {
+     *          repeated Bar results = 1;
+     *          PageResponse page = 2;
+     *  }
+     */
+    pagination?: V1Beta1PageResponse;
+}
+export interface WayneQueryAllLoadPoolResponseResponse {
+    LoadPoolResponse?: WayneLoadPoolResponse[];
     /**
      * PageResponse is to be embedded in gRPC response messages where the
      * corresponding request message has used PageRequest.
@@ -214,11 +249,27 @@ export interface WayneQueryGetDepositResponse {
 export interface WayneQueryGetInterfaceAprResponse {
     InterfaceApr?: WayneInterfaceApr;
 }
+export interface WayneQueryGetLoadPoolResponseResponse {
+    LoadPoolResponse?: WayneLoadPoolResponse;
+}
 export interface WayneQueryGetPoolResponse {
     Pool?: WaynePool;
 }
 export interface WayneQueryGetUserResponse {
     User?: WayneUser;
+}
+export interface WayneQueryLoadPoolResponse {
+    LoadPoolResponse?: WayneLoadPoolResponse[];
+    /**
+     * PageResponse is to be embedded in gRPC response messages where the
+     * corresponding request message has used PageRequest.
+     *
+     *  message SomeResponse {
+     *          repeated Bar results = 1;
+     *          PageResponse page = 2;
+     *  }
+     */
+    pagination?: V1Beta1PageResponse;
 }
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
@@ -366,6 +417,44 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/cosmonaut/wayne/wayne/interface_apr/{id}
      */
     queryInterfaceApr: (id: string, params?: RequestParams) => Promise<HttpResponse<WayneQueryGetInterfaceAprResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryPoolLoad
+     * @request GET:/cosmonaut/wayne/wayne/loadPools
+     */
+    queryPoolLoad: (query?: {
+        "pagination.key"?: string;
+        "pagination.offset"?: string;
+        "pagination.limit"?: string;
+        "pagination.countTotal"?: boolean;
+        "pagination.reverse"?: boolean;
+    }, params?: RequestParams) => Promise<HttpResponse<WayneQueryLoadPoolResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryLoadPoolResponseAll
+     * @summary Queries a list of LoadPoolResponse items.
+     * @request GET:/cosmonaut/wayne/wayne/load_pool_response
+     */
+    queryLoadPoolResponseAll: (query?: {
+        "pagination.key"?: string;
+        "pagination.offset"?: string;
+        "pagination.limit"?: string;
+        "pagination.countTotal"?: boolean;
+        "pagination.reverse"?: boolean;
+    }, params?: RequestParams) => Promise<HttpResponse<WayneQueryAllLoadPoolResponseResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryLoadPoolResponse
+     * @summary Queries a LoadPoolResponse by id.
+     * @request GET:/cosmonaut/wayne/wayne/load_pool_response/{id}
+     */
+    queryLoadPoolResponse: (id: string, params?: RequestParams) => Promise<HttpResponse<WayneQueryGetLoadPoolResponseResponse, RpcStatus>>;
     /**
      * No description
      *

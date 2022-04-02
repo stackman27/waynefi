@@ -1,71 +1,59 @@
 /* eslint-disable */
 import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import { InterfaceApr } from "../wayne/interface_apr";
-import { User } from "../wayne/user";
 
 export const protobufPackage = "cosmonaut.wayne.wayne";
 
-export interface Pool {
+export interface LoadPoolResponse {
   id: number;
   asset: string;
-  denom: string;
   collatoralFactor: number;
-  depositBalance: number;
-  borrowBalance: number;
-  aPR: InterfaceApr[];
-  users: User[];
+  liquidity: number;
+  depositApy: number;
+  borrowApy: number;
   creator: string;
 }
 
-const basePool: object = {
+const baseLoadPoolResponse: object = {
   id: 0,
   asset: "",
-  denom: "",
   collatoralFactor: 0,
-  depositBalance: 0,
-  borrowBalance: 0,
+  liquidity: 0,
+  depositApy: 0,
+  borrowApy: 0,
   creator: "",
 };
 
-export const Pool = {
-  encode(message: Pool, writer: Writer = Writer.create()): Writer {
+export const LoadPoolResponse = {
+  encode(message: LoadPoolResponse, writer: Writer = Writer.create()): Writer {
     if (message.id !== 0) {
       writer.uint32(8).uint64(message.id);
     }
     if (message.asset !== "") {
       writer.uint32(18).string(message.asset);
     }
-    if (message.denom !== "") {
-      writer.uint32(26).string(message.denom);
-    }
     if (message.collatoralFactor !== 0) {
-      writer.uint32(32).int32(message.collatoralFactor);
+      writer.uint32(24).int32(message.collatoralFactor);
     }
-    if (message.depositBalance !== 0) {
-      writer.uint32(40).int32(message.depositBalance);
+    if (message.liquidity !== 0) {
+      writer.uint32(32).int32(message.liquidity);
     }
-    if (message.borrowBalance !== 0) {
-      writer.uint32(48).int32(message.borrowBalance);
+    if (message.depositApy !== 0) {
+      writer.uint32(40).int32(message.depositApy);
     }
-    for (const v of message.aPR) {
-      InterfaceApr.encode(v!, writer.uint32(58).fork()).ldelim();
-    }
-    for (const v of message.users) {
-      User.encode(v!, writer.uint32(66).fork()).ldelim();
+    if (message.borrowApy !== 0) {
+      writer.uint32(48).int32(message.borrowApy);
     }
     if (message.creator !== "") {
-      writer.uint32(74).string(message.creator);
+      writer.uint32(58).string(message.creator);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Pool {
+  decode(input: Reader | Uint8Array, length?: number): LoadPoolResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePool } as Pool;
-    message.aPR = [];
-    message.users = [];
+    const message = { ...baseLoadPoolResponse } as LoadPoolResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -76,24 +64,18 @@ export const Pool = {
           message.asset = reader.string();
           break;
         case 3:
-          message.denom = reader.string();
-          break;
-        case 4:
           message.collatoralFactor = reader.int32();
           break;
+        case 4:
+          message.liquidity = reader.int32();
+          break;
         case 5:
-          message.depositBalance = reader.int32();
+          message.depositApy = reader.int32();
           break;
         case 6:
-          message.borrowBalance = reader.int32();
+          message.borrowApy = reader.int32();
           break;
         case 7:
-          message.aPR.push(InterfaceApr.decode(reader, reader.uint32()));
-          break;
-        case 8:
-          message.users.push(User.decode(reader, reader.uint32()));
-          break;
-        case 9:
           message.creator = reader.string();
           break;
         default:
@@ -104,10 +86,8 @@ export const Pool = {
     return message;
   },
 
-  fromJSON(object: any): Pool {
-    const message = { ...basePool } as Pool;
-    message.aPR = [];
-    message.users = [];
+  fromJSON(object: any): LoadPoolResponse {
+    const message = { ...baseLoadPoolResponse } as LoadPoolResponse;
     if (object.id !== undefined && object.id !== null) {
       message.id = Number(object.id);
     } else {
@@ -118,11 +98,6 @@ export const Pool = {
     } else {
       message.asset = "";
     }
-    if (object.denom !== undefined && object.denom !== null) {
-      message.denom = String(object.denom);
-    } else {
-      message.denom = "";
-    }
     if (
       object.collatoralFactor !== undefined &&
       object.collatoralFactor !== null
@@ -131,25 +106,20 @@ export const Pool = {
     } else {
       message.collatoralFactor = 0;
     }
-    if (object.depositBalance !== undefined && object.depositBalance !== null) {
-      message.depositBalance = Number(object.depositBalance);
+    if (object.liquidity !== undefined && object.liquidity !== null) {
+      message.liquidity = Number(object.liquidity);
     } else {
-      message.depositBalance = 0;
+      message.liquidity = 0;
     }
-    if (object.borrowBalance !== undefined && object.borrowBalance !== null) {
-      message.borrowBalance = Number(object.borrowBalance);
+    if (object.depositApy !== undefined && object.depositApy !== null) {
+      message.depositApy = Number(object.depositApy);
     } else {
-      message.borrowBalance = 0;
+      message.depositApy = 0;
     }
-    if (object.aPR !== undefined && object.aPR !== null) {
-      for (const e of object.aPR) {
-        message.aPR.push(InterfaceApr.fromJSON(e));
-      }
-    }
-    if (object.users !== undefined && object.users !== null) {
-      for (const e of object.users) {
-        message.users.push(User.fromJSON(e));
-      }
+    if (object.borrowApy !== undefined && object.borrowApy !== null) {
+      message.borrowApy = Number(object.borrowApy);
+    } else {
+      message.borrowApy = 0;
     }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
@@ -159,37 +129,21 @@ export const Pool = {
     return message;
   },
 
-  toJSON(message: Pool): unknown {
+  toJSON(message: LoadPoolResponse): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.asset !== undefined && (obj.asset = message.asset);
-    message.denom !== undefined && (obj.denom = message.denom);
     message.collatoralFactor !== undefined &&
       (obj.collatoralFactor = message.collatoralFactor);
-    message.depositBalance !== undefined &&
-      (obj.depositBalance = message.depositBalance);
-    message.borrowBalance !== undefined &&
-      (obj.borrowBalance = message.borrowBalance);
-    if (message.aPR) {
-      obj.aPR = message.aPR.map((e) =>
-        e ? InterfaceApr.toJSON(e) : undefined
-      );
-    } else {
-      obj.aPR = [];
-    }
-    if (message.users) {
-      obj.users = message.users.map((e) => (e ? User.toJSON(e) : undefined));
-    } else {
-      obj.users = [];
-    }
+    message.liquidity !== undefined && (obj.liquidity = message.liquidity);
+    message.depositApy !== undefined && (obj.depositApy = message.depositApy);
+    message.borrowApy !== undefined && (obj.borrowApy = message.borrowApy);
     message.creator !== undefined && (obj.creator = message.creator);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Pool>): Pool {
-    const message = { ...basePool } as Pool;
-    message.aPR = [];
-    message.users = [];
+  fromPartial(object: DeepPartial<LoadPoolResponse>): LoadPoolResponse {
+    const message = { ...baseLoadPoolResponse } as LoadPoolResponse;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -200,11 +154,6 @@ export const Pool = {
     } else {
       message.asset = "";
     }
-    if (object.denom !== undefined && object.denom !== null) {
-      message.denom = object.denom;
-    } else {
-      message.denom = "";
-    }
     if (
       object.collatoralFactor !== undefined &&
       object.collatoralFactor !== null
@@ -213,25 +162,20 @@ export const Pool = {
     } else {
       message.collatoralFactor = 0;
     }
-    if (object.depositBalance !== undefined && object.depositBalance !== null) {
-      message.depositBalance = object.depositBalance;
+    if (object.liquidity !== undefined && object.liquidity !== null) {
+      message.liquidity = object.liquidity;
     } else {
-      message.depositBalance = 0;
+      message.liquidity = 0;
     }
-    if (object.borrowBalance !== undefined && object.borrowBalance !== null) {
-      message.borrowBalance = object.borrowBalance;
+    if (object.depositApy !== undefined && object.depositApy !== null) {
+      message.depositApy = object.depositApy;
     } else {
-      message.borrowBalance = 0;
+      message.depositApy = 0;
     }
-    if (object.aPR !== undefined && object.aPR !== null) {
-      for (const e of object.aPR) {
-        message.aPR.push(InterfaceApr.fromPartial(e));
-      }
-    }
-    if (object.users !== undefined && object.users !== null) {
-      for (const e of object.users) {
-        message.users.push(User.fromPartial(e));
-      }
+    if (object.borrowApy !== undefined && object.borrowApy !== null) {
+      message.borrowApy = object.borrowApy;
+    } else {
+      message.borrowApy = 0;
     }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package cosmonaut.wayne.wayne;
+
+option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
+
+message LoadPoolResponse {
+  uint64 id = 1;
+  string asset = 2; 
+  int32 collatoralFactor = 3; 
+  int32 liquidity = 4; 
+  int32 depositApy = 5; 
+  int32 borrowApy = 6; 
+  string creator = 7;
+}

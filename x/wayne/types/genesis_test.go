@@ -67,6 +67,15 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				InterfaceAprCount: 2,
+				LoadPoolResponseList: []types.LoadPoolResponse{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				LoadPoolResponseCount: 2,
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -198,6 +207,32 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				InterfaceAprCount: 0,
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated loadPoolResponse",
+			genState: &types.GenesisState{
+				LoadPoolResponseList: []types.LoadPoolResponse{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid loadPoolResponse count",
+			genState: &types.GenesisState{
+				LoadPoolResponseList: []types.LoadPoolResponse{
+					{
+						Id: 1,
+					},
+				},
+				LoadPoolResponseCount: 0,
 			},
 			valid: false,
 		},

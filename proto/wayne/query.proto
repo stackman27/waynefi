@@ -10,6 +10,7 @@ import "wayne/deposit.proto";
 import "wayne/borrow.proto";
 import "wayne/user.proto";
 import "wayne/interface_apr.proto";
+import "wayne/load_pool_response.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
@@ -28,6 +29,10 @@ service Query {
 	// Queries a list of Pool items.
 	rpc PoolAll(QueryAllPoolRequest) returns (QueryAllPoolResponse) {
 		option (google.api.http).get = "/cosmonaut/wayne/wayne/pool";
+	}
+
+	rpc PoolLoad(QueryLoadPoolRequest) returns (QueryLoadPoolResponse) {
+		option (google.api.http).get = "/cosmonaut/wayne/wayne/loadPools";
 	}
 
 // Queries a Deposit by id.
@@ -70,6 +75,16 @@ service Query {
 		option (google.api.http).get = "/cosmonaut/wayne/wayne/interface_apr";
 	}
 
+// Queries a LoadPoolResponse by id.
+	rpc LoadPoolResponse(QueryGetLoadPoolResponseRequest) returns (QueryGetLoadPoolResponseResponse) {
+		option (google.api.http).get = "/cosmonaut/wayne/wayne/load_pool_response/{id}";
+	}
+
+	// Queries a list of LoadPoolResponse items.
+	rpc LoadPoolResponseAll(QueryAllLoadPoolResponseRequest) returns (QueryAllLoadPoolResponseResponse) {
+		option (google.api.http).get = "/cosmonaut/wayne/wayne/load_pool_response";
+	}
+
 // this line is used by starport scaffolding # 2
 }
 
@@ -98,6 +113,15 @@ message QueryAllPoolResponse {
 	repeated Pool Pool = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
+
+message QueryLoadPoolRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryLoadPoolResponse {
+	repeated LoadPoolResponse LoadPoolResponse = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+} 
 
 message QueryGetDepositRequest {
 	uint64 id = 1;
@@ -164,6 +188,23 @@ message QueryAllInterfaceAprRequest {
 
 message QueryAllInterfaceAprResponse {
 	repeated InterfaceApr InterfaceApr = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetLoadPoolResponseRequest {
+	uint64 id = 1;
+}
+
+message QueryGetLoadPoolResponseResponse {
+	LoadPoolResponse LoadPoolResponse = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllLoadPoolResponseRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllLoadPoolResponseResponse {
+	repeated LoadPoolResponse LoadPoolResponse = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

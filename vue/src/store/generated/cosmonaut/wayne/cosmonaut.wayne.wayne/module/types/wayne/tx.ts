@@ -13,8 +13,9 @@ export interface MsgCreatePool {
   asset: string;
   denom: string;
   collatoralFactor: number;
-  depth: number;
-  aPR: InterfaceApr[];
+  depositBalance: number;
+  borrowBalance: number;
+  APR: InterfaceApr[];
   users: User[];
 }
 
@@ -28,7 +29,8 @@ export interface MsgUpdatePool {
   asset: string;
   denom: string;
   collatoralFactor: number;
-  depth: number;
+  depositBalance: number;
+  borrowBalance: number;
   aPR: InterfaceApr[];
   users: User[];
 }
@@ -158,12 +160,45 @@ export interface MsgDeleteInterfaceApr {
 
 export interface MsgDeleteInterfaceAprResponse {}
 
+export interface MsgCreateLoadPoolResponse {
+  creator: string;
+  asset: string;
+  collatoralFactor: number;
+  liquidity: number;
+  depositApy: number;
+  borrowApy: number;
+}
+
+export interface MsgCreateLoadPoolResponseResponse {
+  id: number;
+}
+
+export interface MsgUpdateLoadPoolResponse {
+  creator: string;
+  id: number;
+  asset: string;
+  collatoralFactor: number;
+  liquidity: number;
+  depositApy: number;
+  borrowApy: number;
+}
+
+export interface MsgUpdateLoadPoolResponseResponse {}
+
+export interface MsgDeleteLoadPoolResponse {
+  creator: string;
+  id: number;
+}
+
+export interface MsgDeleteLoadPoolResponseResponse {}
+
 const baseMsgCreatePool: object = {
   creator: "",
   asset: "",
   denom: "",
   collatoralFactor: 0,
-  depth: 0,
+  depositBalance: 0,
+  borrowBalance: 0,
 };
 
 export const MsgCreatePool = {
@@ -180,14 +215,17 @@ export const MsgCreatePool = {
     if (message.collatoralFactor !== 0) {
       writer.uint32(32).int32(message.collatoralFactor);
     }
-    if (message.depth !== 0) {
-      writer.uint32(40).int32(message.depth);
+    if (message.depositBalance !== 0) {
+      writer.uint32(40).int32(message.depositBalance);
     }
-    for (const v of message.aPR) {
-      InterfaceApr.encode(v!, writer.uint32(50).fork()).ldelim();
+    if (message.borrowBalance !== 0) {
+      writer.uint32(48).int32(message.borrowBalance);
+    }
+    for (const v of message.APR) {
+      InterfaceApr.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     for (const v of message.users) {
-      User.encode(v!, writer.uint32(58).fork()).ldelim();
+      User.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -196,7 +234,7 @@ export const MsgCreatePool = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgCreatePool } as MsgCreatePool;
-    message.aPR = [];
+    message.APR = [];
     message.users = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -214,12 +252,15 @@ export const MsgCreatePool = {
           message.collatoralFactor = reader.int32();
           break;
         case 5:
-          message.depth = reader.int32();
+          message.depositBalance = reader.int32();
           break;
         case 6:
-          message.aPR.push(InterfaceApr.decode(reader, reader.uint32()));
+          message.borrowBalance = reader.int32();
           break;
         case 7:
+          message.APR.push(InterfaceApr.decode(reader, reader.uint32()));
+          break;
+        case 8:
           message.users.push(User.decode(reader, reader.uint32()));
           break;
         default:
@@ -232,7 +273,7 @@ export const MsgCreatePool = {
 
   fromJSON(object: any): MsgCreatePool {
     const message = { ...baseMsgCreatePool } as MsgCreatePool;
-    message.aPR = [];
+    message.APR = [];
     message.users = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
@@ -257,14 +298,19 @@ export const MsgCreatePool = {
     } else {
       message.collatoralFactor = 0;
     }
-    if (object.depth !== undefined && object.depth !== null) {
-      message.depth = Number(object.depth);
+    if (object.depositBalance !== undefined && object.depositBalance !== null) {
+      message.depositBalance = Number(object.depositBalance);
     } else {
-      message.depth = 0;
+      message.depositBalance = 0;
     }
-    if (object.aPR !== undefined && object.aPR !== null) {
-      for (const e of object.aPR) {
-        message.aPR.push(InterfaceApr.fromJSON(e));
+    if (object.borrowBalance !== undefined && object.borrowBalance !== null) {
+      message.borrowBalance = Number(object.borrowBalance);
+    } else {
+      message.borrowBalance = 0;
+    }
+    if (object.APR !== undefined && object.APR !== null) {
+      for (const e of object.APR) {
+        message.APR.push(InterfaceApr.fromJSON(e));
       }
     }
     if (object.users !== undefined && object.users !== null) {
@@ -282,13 +328,16 @@ export const MsgCreatePool = {
     message.denom !== undefined && (obj.denom = message.denom);
     message.collatoralFactor !== undefined &&
       (obj.collatoralFactor = message.collatoralFactor);
-    message.depth !== undefined && (obj.depth = message.depth);
-    if (message.aPR) {
-      obj.aPR = message.aPR.map((e) =>
+    message.depositBalance !== undefined &&
+      (obj.depositBalance = message.depositBalance);
+    message.borrowBalance !== undefined &&
+      (obj.borrowBalance = message.borrowBalance);
+    if (message.APR) {
+      obj.APR = message.APR.map((e) =>
         e ? InterfaceApr.toJSON(e) : undefined
       );
     } else {
-      obj.aPR = [];
+      obj.APR = [];
     }
     if (message.users) {
       obj.users = message.users.map((e) => (e ? User.toJSON(e) : undefined));
@@ -300,7 +349,7 @@ export const MsgCreatePool = {
 
   fromPartial(object: DeepPartial<MsgCreatePool>): MsgCreatePool {
     const message = { ...baseMsgCreatePool } as MsgCreatePool;
-    message.aPR = [];
+    message.APR = [];
     message.users = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
@@ -325,14 +374,19 @@ export const MsgCreatePool = {
     } else {
       message.collatoralFactor = 0;
     }
-    if (object.depth !== undefined && object.depth !== null) {
-      message.depth = object.depth;
+    if (object.depositBalance !== undefined && object.depositBalance !== null) {
+      message.depositBalance = object.depositBalance;
     } else {
-      message.depth = 0;
+      message.depositBalance = 0;
     }
-    if (object.aPR !== undefined && object.aPR !== null) {
-      for (const e of object.aPR) {
-        message.aPR.push(InterfaceApr.fromPartial(e));
+    if (object.borrowBalance !== undefined && object.borrowBalance !== null) {
+      message.borrowBalance = object.borrowBalance;
+    } else {
+      message.borrowBalance = 0;
+    }
+    if (object.APR !== undefined && object.APR !== null) {
+      for (const e of object.APR) {
+        message.APR.push(InterfaceApr.fromPartial(e));
       }
     }
     if (object.users !== undefined && object.users !== null) {
@@ -410,7 +464,8 @@ const baseMsgUpdatePool: object = {
   asset: "",
   denom: "",
   collatoralFactor: 0,
-  depth: 0,
+  depositBalance: 0,
+  borrowBalance: 0,
 };
 
 export const MsgUpdatePool = {
@@ -430,14 +485,17 @@ export const MsgUpdatePool = {
     if (message.collatoralFactor !== 0) {
       writer.uint32(40).int32(message.collatoralFactor);
     }
-    if (message.depth !== 0) {
-      writer.uint32(48).int32(message.depth);
+    if (message.depositBalance !== 0) {
+      writer.uint32(48).int32(message.depositBalance);
+    }
+    if (message.borrowBalance !== 0) {
+      writer.uint32(56).int32(message.borrowBalance);
     }
     for (const v of message.aPR) {
-      InterfaceApr.encode(v!, writer.uint32(58).fork()).ldelim();
+      InterfaceApr.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     for (const v of message.users) {
-      User.encode(v!, writer.uint32(66).fork()).ldelim();
+      User.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -467,12 +525,15 @@ export const MsgUpdatePool = {
           message.collatoralFactor = reader.int32();
           break;
         case 6:
-          message.depth = reader.int32();
+          message.depositBalance = reader.int32();
           break;
         case 7:
-          message.aPR.push(InterfaceApr.decode(reader, reader.uint32()));
+          message.borrowBalance = reader.int32();
           break;
         case 8:
+          message.aPR.push(InterfaceApr.decode(reader, reader.uint32()));
+          break;
+        case 9:
           message.users.push(User.decode(reader, reader.uint32()));
           break;
         default:
@@ -515,10 +576,15 @@ export const MsgUpdatePool = {
     } else {
       message.collatoralFactor = 0;
     }
-    if (object.depth !== undefined && object.depth !== null) {
-      message.depth = Number(object.depth);
+    if (object.depositBalance !== undefined && object.depositBalance !== null) {
+      message.depositBalance = Number(object.depositBalance);
     } else {
-      message.depth = 0;
+      message.depositBalance = 0;
+    }
+    if (object.borrowBalance !== undefined && object.borrowBalance !== null) {
+      message.borrowBalance = Number(object.borrowBalance);
+    } else {
+      message.borrowBalance = 0;
     }
     if (object.aPR !== undefined && object.aPR !== null) {
       for (const e of object.aPR) {
@@ -541,7 +607,10 @@ export const MsgUpdatePool = {
     message.denom !== undefined && (obj.denom = message.denom);
     message.collatoralFactor !== undefined &&
       (obj.collatoralFactor = message.collatoralFactor);
-    message.depth !== undefined && (obj.depth = message.depth);
+    message.depositBalance !== undefined &&
+      (obj.depositBalance = message.depositBalance);
+    message.borrowBalance !== undefined &&
+      (obj.borrowBalance = message.borrowBalance);
     if (message.aPR) {
       obj.aPR = message.aPR.map((e) =>
         e ? InterfaceApr.toJSON(e) : undefined
@@ -589,10 +658,15 @@ export const MsgUpdatePool = {
     } else {
       message.collatoralFactor = 0;
     }
-    if (object.depth !== undefined && object.depth !== null) {
-      message.depth = object.depth;
+    if (object.depositBalance !== undefined && object.depositBalance !== null) {
+      message.depositBalance = object.depositBalance;
     } else {
-      message.depth = 0;
+      message.depositBalance = 0;
+    }
+    if (object.borrowBalance !== undefined && object.borrowBalance !== null) {
+      message.borrowBalance = object.borrowBalance;
+    } else {
+      message.borrowBalance = 0;
     }
     if (object.aPR !== undefined && object.aPR !== null) {
       for (const e of object.aPR) {
@@ -2831,6 +2905,619 @@ export const MsgDeleteInterfaceAprResponse = {
   },
 };
 
+const baseMsgCreateLoadPoolResponse: object = {
+  creator: "",
+  asset: "",
+  collatoralFactor: 0,
+  liquidity: 0,
+  depositApy: 0,
+  borrowApy: 0,
+};
+
+export const MsgCreateLoadPoolResponse = {
+  encode(
+    message: MsgCreateLoadPoolResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.asset !== "") {
+      writer.uint32(18).string(message.asset);
+    }
+    if (message.collatoralFactor !== 0) {
+      writer.uint32(24).int32(message.collatoralFactor);
+    }
+    if (message.liquidity !== 0) {
+      writer.uint32(32).int32(message.liquidity);
+    }
+    if (message.depositApy !== 0) {
+      writer.uint32(40).int32(message.depositApy);
+    }
+    if (message.borrowApy !== 0) {
+      writer.uint32(48).int32(message.borrowApy);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateLoadPoolResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateLoadPoolResponse,
+    } as MsgCreateLoadPoolResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.asset = reader.string();
+          break;
+        case 3:
+          message.collatoralFactor = reader.int32();
+          break;
+        case 4:
+          message.liquidity = reader.int32();
+          break;
+        case 5:
+          message.depositApy = reader.int32();
+          break;
+        case 6:
+          message.borrowApy = reader.int32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateLoadPoolResponse {
+    const message = {
+      ...baseMsgCreateLoadPoolResponse,
+    } as MsgCreateLoadPoolResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = String(object.asset);
+    } else {
+      message.asset = "";
+    }
+    if (
+      object.collatoralFactor !== undefined &&
+      object.collatoralFactor !== null
+    ) {
+      message.collatoralFactor = Number(object.collatoralFactor);
+    } else {
+      message.collatoralFactor = 0;
+    }
+    if (object.liquidity !== undefined && object.liquidity !== null) {
+      message.liquidity = Number(object.liquidity);
+    } else {
+      message.liquidity = 0;
+    }
+    if (object.depositApy !== undefined && object.depositApy !== null) {
+      message.depositApy = Number(object.depositApy);
+    } else {
+      message.depositApy = 0;
+    }
+    if (object.borrowApy !== undefined && object.borrowApy !== null) {
+      message.borrowApy = Number(object.borrowApy);
+    } else {
+      message.borrowApy = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateLoadPoolResponse): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.collatoralFactor !== undefined &&
+      (obj.collatoralFactor = message.collatoralFactor);
+    message.liquidity !== undefined && (obj.liquidity = message.liquidity);
+    message.depositApy !== undefined && (obj.depositApy = message.depositApy);
+    message.borrowApy !== undefined && (obj.borrowApy = message.borrowApy);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateLoadPoolResponse>
+  ): MsgCreateLoadPoolResponse {
+    const message = {
+      ...baseMsgCreateLoadPoolResponse,
+    } as MsgCreateLoadPoolResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    } else {
+      message.asset = "";
+    }
+    if (
+      object.collatoralFactor !== undefined &&
+      object.collatoralFactor !== null
+    ) {
+      message.collatoralFactor = object.collatoralFactor;
+    } else {
+      message.collatoralFactor = 0;
+    }
+    if (object.liquidity !== undefined && object.liquidity !== null) {
+      message.liquidity = object.liquidity;
+    } else {
+      message.liquidity = 0;
+    }
+    if (object.depositApy !== undefined && object.depositApy !== null) {
+      message.depositApy = object.depositApy;
+    } else {
+      message.depositApy = 0;
+    }
+    if (object.borrowApy !== undefined && object.borrowApy !== null) {
+      message.borrowApy = object.borrowApy;
+    } else {
+      message.borrowApy = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateLoadPoolResponseResponse: object = { id: 0 };
+
+export const MsgCreateLoadPoolResponseResponse = {
+  encode(
+    message: MsgCreateLoadPoolResponseResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateLoadPoolResponseResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateLoadPoolResponseResponse,
+    } as MsgCreateLoadPoolResponseResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateLoadPoolResponseResponse {
+    const message = {
+      ...baseMsgCreateLoadPoolResponseResponse,
+    } as MsgCreateLoadPoolResponseResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateLoadPoolResponseResponse): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateLoadPoolResponseResponse>
+  ): MsgCreateLoadPoolResponseResponse {
+    const message = {
+      ...baseMsgCreateLoadPoolResponseResponse,
+    } as MsgCreateLoadPoolResponseResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateLoadPoolResponse: object = {
+  creator: "",
+  id: 0,
+  asset: "",
+  collatoralFactor: 0,
+  liquidity: 0,
+  depositApy: 0,
+  borrowApy: 0,
+};
+
+export const MsgUpdateLoadPoolResponse = {
+  encode(
+    message: MsgUpdateLoadPoolResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.id !== 0) {
+      writer.uint32(16).uint64(message.id);
+    }
+    if (message.asset !== "") {
+      writer.uint32(26).string(message.asset);
+    }
+    if (message.collatoralFactor !== 0) {
+      writer.uint32(32).int32(message.collatoralFactor);
+    }
+    if (message.liquidity !== 0) {
+      writer.uint32(40).int32(message.liquidity);
+    }
+    if (message.depositApy !== 0) {
+      writer.uint32(48).int32(message.depositApy);
+    }
+    if (message.borrowApy !== 0) {
+      writer.uint32(56).int32(message.borrowApy);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateLoadPoolResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateLoadPoolResponse,
+    } as MsgUpdateLoadPoolResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.asset = reader.string();
+          break;
+        case 4:
+          message.collatoralFactor = reader.int32();
+          break;
+        case 5:
+          message.liquidity = reader.int32();
+          break;
+        case 6:
+          message.depositApy = reader.int32();
+          break;
+        case 7:
+          message.borrowApy = reader.int32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateLoadPoolResponse {
+    const message = {
+      ...baseMsgUpdateLoadPoolResponse,
+    } as MsgUpdateLoadPoolResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = String(object.asset);
+    } else {
+      message.asset = "";
+    }
+    if (
+      object.collatoralFactor !== undefined &&
+      object.collatoralFactor !== null
+    ) {
+      message.collatoralFactor = Number(object.collatoralFactor);
+    } else {
+      message.collatoralFactor = 0;
+    }
+    if (object.liquidity !== undefined && object.liquidity !== null) {
+      message.liquidity = Number(object.liquidity);
+    } else {
+      message.liquidity = 0;
+    }
+    if (object.depositApy !== undefined && object.depositApy !== null) {
+      message.depositApy = Number(object.depositApy);
+    } else {
+      message.depositApy = 0;
+    }
+    if (object.borrowApy !== undefined && object.borrowApy !== null) {
+      message.borrowApy = Number(object.borrowApy);
+    } else {
+      message.borrowApy = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateLoadPoolResponse): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.id !== undefined && (obj.id = message.id);
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.collatoralFactor !== undefined &&
+      (obj.collatoralFactor = message.collatoralFactor);
+    message.liquidity !== undefined && (obj.liquidity = message.liquidity);
+    message.depositApy !== undefined && (obj.depositApy = message.depositApy);
+    message.borrowApy !== undefined && (obj.borrowApy = message.borrowApy);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateLoadPoolResponse>
+  ): MsgUpdateLoadPoolResponse {
+    const message = {
+      ...baseMsgUpdateLoadPoolResponse,
+    } as MsgUpdateLoadPoolResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    } else {
+      message.asset = "";
+    }
+    if (
+      object.collatoralFactor !== undefined &&
+      object.collatoralFactor !== null
+    ) {
+      message.collatoralFactor = object.collatoralFactor;
+    } else {
+      message.collatoralFactor = 0;
+    }
+    if (object.liquidity !== undefined && object.liquidity !== null) {
+      message.liquidity = object.liquidity;
+    } else {
+      message.liquidity = 0;
+    }
+    if (object.depositApy !== undefined && object.depositApy !== null) {
+      message.depositApy = object.depositApy;
+    } else {
+      message.depositApy = 0;
+    }
+    if (object.borrowApy !== undefined && object.borrowApy !== null) {
+      message.borrowApy = object.borrowApy;
+    } else {
+      message.borrowApy = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateLoadPoolResponseResponse: object = {};
+
+export const MsgUpdateLoadPoolResponseResponse = {
+  encode(
+    _: MsgUpdateLoadPoolResponseResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateLoadPoolResponseResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateLoadPoolResponseResponse,
+    } as MsgUpdateLoadPoolResponseResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateLoadPoolResponseResponse {
+    const message = {
+      ...baseMsgUpdateLoadPoolResponseResponse,
+    } as MsgUpdateLoadPoolResponseResponse;
+    return message;
+  },
+
+  toJSON(_: MsgUpdateLoadPoolResponseResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<MsgUpdateLoadPoolResponseResponse>
+  ): MsgUpdateLoadPoolResponseResponse {
+    const message = {
+      ...baseMsgUpdateLoadPoolResponseResponse,
+    } as MsgUpdateLoadPoolResponseResponse;
+    return message;
+  },
+};
+
+const baseMsgDeleteLoadPoolResponse: object = { creator: "", id: 0 };
+
+export const MsgDeleteLoadPoolResponse = {
+  encode(
+    message: MsgDeleteLoadPoolResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.id !== 0) {
+      writer.uint32(16).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgDeleteLoadPoolResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgDeleteLoadPoolResponse,
+    } as MsgDeleteLoadPoolResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteLoadPoolResponse {
+    const message = {
+      ...baseMsgDeleteLoadPoolResponse,
+    } as MsgDeleteLoadPoolResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteLoadPoolResponse): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgDeleteLoadPoolResponse>
+  ): MsgDeleteLoadPoolResponse {
+    const message = {
+      ...baseMsgDeleteLoadPoolResponse,
+    } as MsgDeleteLoadPoolResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteLoadPoolResponseResponse: object = {};
+
+export const MsgDeleteLoadPoolResponseResponse = {
+  encode(
+    _: MsgDeleteLoadPoolResponseResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgDeleteLoadPoolResponseResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgDeleteLoadPoolResponseResponse,
+    } as MsgDeleteLoadPoolResponseResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgDeleteLoadPoolResponseResponse {
+    const message = {
+      ...baseMsgDeleteLoadPoolResponseResponse,
+    } as MsgDeleteLoadPoolResponseResponse;
+    return message;
+  },
+
+  toJSON(_: MsgDeleteLoadPoolResponseResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<MsgDeleteLoadPoolResponseResponse>
+  ): MsgDeleteLoadPoolResponseResponse {
+    const message = {
+      ...baseMsgDeleteLoadPoolResponseResponse,
+    } as MsgDeleteLoadPoolResponseResponse;
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreatePool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
@@ -2851,10 +3538,19 @@ export interface Msg {
   UpdateInterfaceApr(
     request: MsgUpdateInterfaceApr
   ): Promise<MsgUpdateInterfaceAprResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   DeleteInterfaceApr(
     request: MsgDeleteInterfaceApr
   ): Promise<MsgDeleteInterfaceAprResponse>;
+  CreateLoadPoolResponse(
+    request: MsgCreateLoadPoolResponse
+  ): Promise<MsgCreateLoadPoolResponseResponse>;
+  UpdateLoadPoolResponse(
+    request: MsgUpdateLoadPoolResponse
+  ): Promise<MsgUpdateLoadPoolResponseResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  DeleteLoadPoolResponse(
+    request: MsgDeleteLoadPoolResponse
+  ): Promise<MsgDeleteLoadPoolResponseResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -3045,6 +3741,48 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgDeleteInterfaceAprResponse.decode(new Reader(data))
+    );
+  }
+
+  CreateLoadPoolResponse(
+    request: MsgCreateLoadPoolResponse
+  ): Promise<MsgCreateLoadPoolResponseResponse> {
+    const data = MsgCreateLoadPoolResponse.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Msg",
+      "CreateLoadPoolResponse",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateLoadPoolResponseResponse.decode(new Reader(data))
+    );
+  }
+
+  UpdateLoadPoolResponse(
+    request: MsgUpdateLoadPoolResponse
+  ): Promise<MsgUpdateLoadPoolResponseResponse> {
+    const data = MsgUpdateLoadPoolResponse.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Msg",
+      "UpdateLoadPoolResponse",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateLoadPoolResponseResponse.decode(new Reader(data))
+    );
+  }
+
+  DeleteLoadPoolResponse(
+    request: MsgDeleteLoadPoolResponse
+  ): Promise<MsgDeleteLoadPoolResponseResponse> {
+    const data = MsgDeleteLoadPoolResponse.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Msg",
+      "DeleteLoadPoolResponse",
+      data
+    );
+    return promise.then((data) =>
+      MsgDeleteLoadPoolResponseResponse.decode(new Reader(data))
     );
   }
 }

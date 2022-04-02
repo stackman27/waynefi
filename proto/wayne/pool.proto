@@ -10,8 +10,9 @@ message Pool {
   string asset = 2; 
   string denom = 3; 
   int32 collatoralFactor = 4; 
-  int32 depth = 5; 
-  repeated InterfaceApr aPR = 6; 
-  repeated User users = 7; 
-  string creator = 8;
+  int32 depositBalance = 5;
+  int32 borrowBalance = 6;
+  repeated InterfaceApr aPR = 7; 
+  repeated User users = 8; 
+  string creator = 9;
 }

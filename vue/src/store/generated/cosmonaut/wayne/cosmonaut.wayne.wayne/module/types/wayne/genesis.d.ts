@@ -5,6 +5,7 @@ import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
 import { InterfaceApr } from "../wayne/interface_apr";
+import { LoadPoolResponse } from "../wayne/load_pool_response";
 export declare const protobufPackage = "cosmonaut.wayne.wayne";
 /** GenesisState defines the wayne module's genesis state. */
 export interface GenesisState {
@@ -18,8 +19,10 @@ export interface GenesisState {
     userList: User[];
     userCount: number;
     interfaceAprList: InterfaceApr[];
-    /** this line is used by starport scaffolding # genesis/proto/state */
     interfaceAprCount: number;
+    loadPoolResponseList: LoadPoolResponse[];
+    /** this line is used by starport scaffolding # genesis/proto/state */
+    loadPoolResponseCount: number;
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: Writer): Writer;

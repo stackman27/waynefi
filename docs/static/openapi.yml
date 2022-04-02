@@ -558,6 +558,339 @@ paths:
           format: uint64
       tags:
         - Query
+  /cosmonaut/wayne/wayne/loadPools:
+    get:
+      operationId: CosmonautWayneWaynePoolLoad
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              LoadPoolResponse:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uint64
+                    asset:
+                      type: string
+                    collatoralFactor:
+                      type: integer
+                      format: int32
+                    liquidity:
+                      type: integer
+                      format: int32
+                    depositApy:
+                      type: integer
+                      format: int32
+                    borrowApy:
+                      type: integer
+                      format: int32
+                    creator:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /cosmonaut/wayne/wayne/load_pool_response:
+    get:
+      summary: Queries a list of LoadPoolResponse items.
+      operationId: CosmonautWayneWayneLoadPoolResponseAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              LoadPoolResponse:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uint64
+                    asset:
+                      type: string
+                    collatoralFactor:
+                      type: integer
+                      format: int32
+                    liquidity:
+                      type: integer
+                      format: int32
+                    depositApy:
+                      type: integer
+                      format: int32
+                    borrowApy:
+                      type: integer
+                      format: int32
+                    creator:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/cosmonaut/wayne/wayne/load_pool_response/{id}':
+    get:
+      summary: Queries a LoadPoolResponse by id.
+      operationId: CosmonautWayneWayneLoadPoolResponse
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              LoadPoolResponse:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uint64
+                  asset:
+                    type: string
+                  collatoralFactor:
+                    type: integer
+                    format: int32
+                  liquidity:
+                    type: integer
+                    format: int32
+                  depositApy:
+                    type: integer
+                    format: int32
+                  borrowApy:
+                    type: integer
+                    format: int32
+                  creator:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
   /cosmonaut/wayne/wayne/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -619,7 +952,10 @@ paths:
                     collatoralFactor:
                       type: integer
                       format: int32
-                    depth:
+                    depositBalance:
+                      type: integer
+                      format: int32
+                    borrowBalance:
                       type: integer
                       format: int32
                     aPR:
@@ -825,7 +1161,10 @@ paths:
                   collatoralFactor:
                     type: integer
                     format: int32
-                  depth:
+                  depositBalance:
+                    type: integer
+                    format: int32
+                  borrowBalance:
                     type: integer
                     format: int32
                   aPR:
@@ -13816,6 +14155,28 @@ definitions:
         format: int32
       creator:
         type: string
+  cosmonaut.wayne.wayne.LoadPoolResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+      asset:
+        type: string
+      collatoralFactor:
+        type: integer
+        format: int32
+      liquidity:
+        type: integer
+        format: int32
+      depositApy:
+        type: integer
+        format: int32
+      borrowApy:
+        type: integer
+        format: int32
+      creator:
+        type: string
   cosmonaut.wayne.wayne.MsgCreateBorrowResponse:
     type: object
     properties:
@@ -13829,6 +14190,12 @@ definitions:
         type: string
         format: uint64
   cosmonaut.wayne.wayne.MsgCreateInterfaceAprResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+  cosmonaut.wayne.wayne.MsgCreateLoadPoolResponseResponse:
     type: object
     properties:
       id:
@@ -13852,6 +14219,8 @@ definitions:
     type: object
   cosmonaut.wayne.wayne.MsgDeleteInterfaceAprResponse:
     type: object
+  cosmonaut.wayne.wayne.MsgDeleteLoadPoolResponseResponse:
+    type: object
   cosmonaut.wayne.wayne.MsgDeletePoolResponse:
     type: object
   cosmonaut.wayne.wayne.MsgDeleteUserResponse:
@@ -13861,6 +14230,8 @@ definitions:
   cosmonaut.wayne.wayne.MsgUpdateDepositResponse:
     type: object
   cosmonaut.wayne.wayne.MsgUpdateInterfaceAprResponse:
+    type: object
+  cosmonaut.wayne.wayne.MsgUpdateLoadPoolResponseResponse:
     type: object
   cosmonaut.wayne.wayne.MsgUpdatePoolResponse:
     type: object
@@ -13882,7 +14253,10 @@ definitions:
       collatoralFactor:
         type: integer
         format: int32
-      depth:
+      depositBalance:
+        type: integer
+        format: int32
+      borrowBalance:
         type: integer
         format: int32
       aPR:
@@ -14100,6 +14474,58 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
+  cosmonaut.wayne.wayne.QueryAllLoadPoolResponseResponse:
+    type: object
+    properties:
+      LoadPoolResponse:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uint64
+            asset:
+              type: string
+            collatoralFactor:
+              type: integer
+              format: int32
+            liquidity:
+              type: integer
+              format: int32
+            depositApy:
+              type: integer
+              format: int32
+            borrowApy:
+              type: integer
+              format: int32
+            creator:
+              type: string
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   cosmonaut.wayne.wayne.QueryAllPoolResponse:
     type: object
     properties:
@@ -14118,7 +14544,10 @@ definitions:
             collatoralFactor:
               type: integer
               format: int32
-            depth:
+            depositBalance:
+              type: integer
+              format: int32
+            borrowBalance:
               type: integer
               format: int32
             aPR:
@@ -14367,6 +14796,31 @@ definitions:
             format: int32
           creator:
             type: string
+  cosmonaut.wayne.wayne.QueryGetLoadPoolResponseResponse:
+    type: object
+    properties:
+      LoadPoolResponse:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uint64
+          asset:
+            type: string
+          collatoralFactor:
+            type: integer
+            format: int32
+          liquidity:
+            type: integer
+            format: int32
+          depositApy:
+            type: integer
+            format: int32
+          borrowApy:
+            type: integer
+            format: int32
+          creator:
+            type: string
   cosmonaut.wayne.wayne.QueryGetPoolResponse:
     type: object
     properties:
@@ -14383,7 +14837,10 @@ definitions:
           collatoralFactor:
             type: integer
             format: int32
-          depth:
+          depositBalance:
+            type: integer
+            format: int32
+          borrowBalance:
             type: integer
             format: int32
           aPR:
@@ -14522,6 +14979,58 @@ definitions:
             items:
               type: integer
               format: int32
+  cosmonaut.wayne.wayne.QueryLoadPoolResponse:
+    type: object
+    properties:
+      LoadPoolResponse:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uint64
+            asset:
+              type: string
+            collatoralFactor:
+              type: integer
+              format: int32
+            liquidity:
+              type: integer
+              format: int32
+            depositApy:
+              type: integer
+              format: int32
+            borrowApy:
+              type: integer
+              format: int32
+            creator:
+              type: string
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   cosmonaut.wayne.wayne.QueryParamsResponse:
     type: object
     properties:

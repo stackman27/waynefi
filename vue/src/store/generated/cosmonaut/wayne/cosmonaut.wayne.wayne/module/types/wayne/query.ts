@@ -7,6 +7,7 @@ import {
   PageRequest,
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
+import { LoadPoolResponse } from "../wayne/load_pool_response";
 import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
@@ -37,6 +38,15 @@ export interface QueryAllPoolRequest {
 
 export interface QueryAllPoolResponse {
   Pool: Pool[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryLoadPoolRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryLoadPoolResponse {
+  LoadPoolResponse: LoadPoolResponse[];
   pagination: PageResponse | undefined;
 }
 
@@ -105,6 +115,23 @@ export interface QueryAllInterfaceAprRequest {
 
 export interface QueryAllInterfaceAprResponse {
   InterfaceApr: InterfaceApr[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetLoadPoolResponseRequest {
+  id: number;
+}
+
+export interface QueryGetLoadPoolResponseResponse {
+  LoadPoolResponse: LoadPoolResponse | undefined;
+}
+
+export interface QueryAllLoadPoolResponseRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllLoadPoolResponseResponse {
+  LoadPoolResponse: LoadPoolResponse[];
   pagination: PageResponse | undefined;
 }
 
@@ -460,6 +487,167 @@ export const QueryAllPoolResponse = {
     if (object.Pool !== undefined && object.Pool !== null) {
       for (const e of object.Pool) {
         message.Pool.push(Pool.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryLoadPoolRequest: object = {};
+
+export const QueryLoadPoolRequest = {
+  encode(
+    message: QueryLoadPoolRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryLoadPoolRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryLoadPoolRequest } as QueryLoadPoolRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryLoadPoolRequest {
+    const message = { ...baseQueryLoadPoolRequest } as QueryLoadPoolRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryLoadPoolRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryLoadPoolRequest>): QueryLoadPoolRequest {
+    const message = { ...baseQueryLoadPoolRequest } as QueryLoadPoolRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryLoadPoolResponse: object = {};
+
+export const QueryLoadPoolResponse = {
+  encode(
+    message: QueryLoadPoolResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.LoadPoolResponse) {
+      LoadPoolResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryLoadPoolResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryLoadPoolResponse } as QueryLoadPoolResponse;
+    message.LoadPoolResponse = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.LoadPoolResponse.push(
+            LoadPoolResponse.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryLoadPoolResponse {
+    const message = { ...baseQueryLoadPoolResponse } as QueryLoadPoolResponse;
+    message.LoadPoolResponse = [];
+    if (
+      object.LoadPoolResponse !== undefined &&
+      object.LoadPoolResponse !== null
+    ) {
+      for (const e of object.LoadPoolResponse) {
+        message.LoadPoolResponse.push(LoadPoolResponse.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryLoadPoolResponse): unknown {
+    const obj: any = {};
+    if (message.LoadPoolResponse) {
+      obj.LoadPoolResponse = message.LoadPoolResponse.map((e) =>
+        e ? LoadPoolResponse.toJSON(e) : undefined
+      );
+    } else {
+      obj.LoadPoolResponse = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryLoadPoolResponse>
+  ): QueryLoadPoolResponse {
+    const message = { ...baseQueryLoadPoolResponse } as QueryLoadPoolResponse;
+    message.LoadPoolResponse = [];
+    if (
+      object.LoadPoolResponse !== undefined &&
+      object.LoadPoolResponse !== null
+    ) {
+      for (const e of object.LoadPoolResponse) {
+        message.LoadPoolResponse.push(LoadPoolResponse.fromPartial(e));
       }
     }
     if (object.pagination !== undefined && object.pagination !== null) {
@@ -1622,6 +1810,344 @@ export const QueryAllInterfaceAprResponse = {
   },
 };
 
+const baseQueryGetLoadPoolResponseRequest: object = { id: 0 };
+
+export const QueryGetLoadPoolResponseRequest = {
+  encode(
+    message: QueryGetLoadPoolResponseRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetLoadPoolResponseRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetLoadPoolResponseRequest,
+    } as QueryGetLoadPoolResponseRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetLoadPoolResponseRequest {
+    const message = {
+      ...baseQueryGetLoadPoolResponseRequest,
+    } as QueryGetLoadPoolResponseRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetLoadPoolResponseRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetLoadPoolResponseRequest>
+  ): QueryGetLoadPoolResponseRequest {
+    const message = {
+      ...baseQueryGetLoadPoolResponseRequest,
+    } as QueryGetLoadPoolResponseRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetLoadPoolResponseResponse: object = {};
+
+export const QueryGetLoadPoolResponseResponse = {
+  encode(
+    message: QueryGetLoadPoolResponseResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.LoadPoolResponse !== undefined) {
+      LoadPoolResponse.encode(
+        message.LoadPoolResponse,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetLoadPoolResponseResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetLoadPoolResponseResponse,
+    } as QueryGetLoadPoolResponseResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.LoadPoolResponse = LoadPoolResponse.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetLoadPoolResponseResponse {
+    const message = {
+      ...baseQueryGetLoadPoolResponseResponse,
+    } as QueryGetLoadPoolResponseResponse;
+    if (
+      object.LoadPoolResponse !== undefined &&
+      object.LoadPoolResponse !== null
+    ) {
+      message.LoadPoolResponse = LoadPoolResponse.fromJSON(
+        object.LoadPoolResponse
+      );
+    } else {
+      message.LoadPoolResponse = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetLoadPoolResponseResponse): unknown {
+    const obj: any = {};
+    message.LoadPoolResponse !== undefined &&
+      (obj.LoadPoolResponse = message.LoadPoolResponse
+        ? LoadPoolResponse.toJSON(message.LoadPoolResponse)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetLoadPoolResponseResponse>
+  ): QueryGetLoadPoolResponseResponse {
+    const message = {
+      ...baseQueryGetLoadPoolResponseResponse,
+    } as QueryGetLoadPoolResponseResponse;
+    if (
+      object.LoadPoolResponse !== undefined &&
+      object.LoadPoolResponse !== null
+    ) {
+      message.LoadPoolResponse = LoadPoolResponse.fromPartial(
+        object.LoadPoolResponse
+      );
+    } else {
+      message.LoadPoolResponse = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllLoadPoolResponseRequest: object = {};
+
+export const QueryAllLoadPoolResponseRequest = {
+  encode(
+    message: QueryAllLoadPoolResponseRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllLoadPoolResponseRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllLoadPoolResponseRequest,
+    } as QueryAllLoadPoolResponseRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllLoadPoolResponseRequest {
+    const message = {
+      ...baseQueryAllLoadPoolResponseRequest,
+    } as QueryAllLoadPoolResponseRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllLoadPoolResponseRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllLoadPoolResponseRequest>
+  ): QueryAllLoadPoolResponseRequest {
+    const message = {
+      ...baseQueryAllLoadPoolResponseRequest,
+    } as QueryAllLoadPoolResponseRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllLoadPoolResponseResponse: object = {};
+
+export const QueryAllLoadPoolResponseResponse = {
+  encode(
+    message: QueryAllLoadPoolResponseResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.LoadPoolResponse) {
+      LoadPoolResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllLoadPoolResponseResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllLoadPoolResponseResponse,
+    } as QueryAllLoadPoolResponseResponse;
+    message.LoadPoolResponse = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.LoadPoolResponse.push(
+            LoadPoolResponse.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllLoadPoolResponseResponse {
+    const message = {
+      ...baseQueryAllLoadPoolResponseResponse,
+    } as QueryAllLoadPoolResponseResponse;
+    message.LoadPoolResponse = [];
+    if (
+      object.LoadPoolResponse !== undefined &&
+      object.LoadPoolResponse !== null
+    ) {
+      for (const e of object.LoadPoolResponse) {
+        message.LoadPoolResponse.push(LoadPoolResponse.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllLoadPoolResponseResponse): unknown {
+    const obj: any = {};
+    if (message.LoadPoolResponse) {
+      obj.LoadPoolResponse = message.LoadPoolResponse.map((e) =>
+        e ? LoadPoolResponse.toJSON(e) : undefined
+      );
+    } else {
+      obj.LoadPoolResponse = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllLoadPoolResponseResponse>
+  ): QueryAllLoadPoolResponseResponse {
+    const message = {
+      ...baseQueryAllLoadPoolResponseResponse,
+    } as QueryAllLoadPoolResponseResponse;
+    message.LoadPoolResponse = [];
+    if (
+      object.LoadPoolResponse !== undefined &&
+      object.LoadPoolResponse !== null
+    ) {
+      for (const e of object.LoadPoolResponse) {
+        message.LoadPoolResponse.push(LoadPoolResponse.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -1630,6 +2156,7 @@ export interface Query {
   Pool(request: QueryGetPoolRequest): Promise<QueryGetPoolResponse>;
   /** Queries a list of Pool items. */
   PoolAll(request: QueryAllPoolRequest): Promise<QueryAllPoolResponse>;
+  PoolLoad(request: QueryLoadPoolRequest): Promise<QueryLoadPoolResponse>;
   /** Queries a Deposit by id. */
   Deposit(request: QueryGetDepositRequest): Promise<QueryGetDepositResponse>;
   /** Queries a list of Deposit items. */
@@ -1650,6 +2177,14 @@ export interface Query {
   InterfaceAprAll(
     request: QueryAllInterfaceAprRequest
   ): Promise<QueryAllInterfaceAprResponse>;
+  /** Queries a LoadPoolResponse by id. */
+  LoadPoolResponse(
+    request: QueryGetLoadPoolResponseRequest
+  ): Promise<QueryGetLoadPoolResponseResponse>;
+  /** Queries a list of LoadPoolResponse items. */
+  LoadPoolResponseAll(
+    request: QueryAllLoadPoolResponseRequest
+  ): Promise<QueryAllLoadPoolResponseResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1688,6 +2223,18 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllPoolResponse.decode(new Reader(data))
+    );
+  }
+
+  PoolLoad(request: QueryLoadPoolRequest): Promise<QueryLoadPoolResponse> {
+    const data = QueryLoadPoolRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Query",
+      "PoolLoad",
+      data
+    );
+    return promise.then((data) =>
+      QueryLoadPoolResponse.decode(new Reader(data))
     );
   }
 
@@ -1790,6 +2337,34 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllInterfaceAprResponse.decode(new Reader(data))
+    );
+  }
+
+  LoadPoolResponse(
+    request: QueryGetLoadPoolResponseRequest
+  ): Promise<QueryGetLoadPoolResponseResponse> {
+    const data = QueryGetLoadPoolResponseRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Query",
+      "LoadPoolResponse",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetLoadPoolResponseResponse.decode(new Reader(data))
+    );
+  }
+
+  LoadPoolResponseAll(
+    request: QueryAllLoadPoolResponseRequest
+  ): Promise<QueryAllLoadPoolResponseResponse> {
+    const data = QueryAllLoadPoolResponseRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Query",
+      "LoadPoolResponseAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllLoadPoolResponseResponse.decode(new Reader(data))
     );
   }
 }
