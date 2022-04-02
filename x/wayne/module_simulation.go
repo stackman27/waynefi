@@ -108,6 +108,18 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgDeleteWithdraw int = 100
 
+	opWeightMsgCreateRepay = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgCreateRepay int = 100
+
+	opWeightMsgUpdateRepay = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgUpdateRepay int = 100
+
+	opWeightMsgDeleteRepay = "op_weight_msg_create_chain"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgDeleteRepay int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -195,6 +207,17 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 			},
 		},
 		WithdrawCount: 2,
+		RepayList: []types.Repay{
+			{
+				Id:      0,
+				Creator: sample.AccAddress(),
+			},
+			{
+				Id:      1,
+				Creator: sample.AccAddress(),
+			},
+		},
+		RepayCount: 2,
 		// this line is used by starport scaffolding # simapp/module/genesisState
 	}
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&wayneGenesis)
@@ -447,6 +470,39 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgDeleteWithdraw,
 		waynesimulation.SimulateMsgDeleteWithdraw(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgCreateRepay int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgCreateRepay, &weightMsgCreateRepay, nil,
+		func(_ *rand.Rand) {
+			weightMsgCreateRepay = defaultWeightMsgCreateRepay
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgCreateRepay,
+		waynesimulation.SimulateMsgCreateRepay(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgUpdateRepay int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgUpdateRepay, &weightMsgUpdateRepay, nil,
+		func(_ *rand.Rand) {
+			weightMsgUpdateRepay = defaultWeightMsgUpdateRepay
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgUpdateRepay,
+		waynesimulation.SimulateMsgUpdateRepay(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgDeleteRepay int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgDeleteRepay, &weightMsgDeleteRepay, nil,
+		func(_ *rand.Rand) {
+			weightMsgDeleteRepay = defaultWeightMsgDeleteRepay
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgDeleteRepay,
+		waynesimulation.SimulateMsgDeleteRepay(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation

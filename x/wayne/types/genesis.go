@@ -17,6 +17,7 @@ func DefaultGenesis() *GenesisState {
 		InterfaceAprList:     []InterfaceApr{},
 		LoadPoolResponseList: []LoadPoolResponse{},
 		WithdrawList:         []Withdraw{},
+		RepayList:            []Repay{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -108,6 +109,18 @@ func (gs GenesisState) Validate() error {
 			return fmt.Errorf("withdraw id should be lower or equal than the last id")
 		}
 		withdrawIdMap[elem.Id] = true
+	}
+	// Check for duplicated ID in repay
+	repayIdMap := make(map[uint64]bool)
+	repayCount := gs.GetRepayCount()
+	for _, elem := range gs.RepayList {
+		if _, ok := repayIdMap[elem.Id]; ok {
+			return fmt.Errorf("duplicated id for repay")
+		}
+		if elem.Id >= repayCount {
+			return fmt.Errorf("repay id should be lower or equal than the last id")
+		}
+		repayIdMap[elem.Id] = true
 	}
 	// this line is used by starport scaffolding # genesis/types/validate
 

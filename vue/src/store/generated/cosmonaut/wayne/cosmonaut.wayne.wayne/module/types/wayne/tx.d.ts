@@ -190,6 +190,32 @@ export interface MsgDeleteWithdraw {
 }
 export interface MsgDeleteWithdrawResponse {
 }
+export interface MsgCreateRepay {
+    creator: string;
+    blockHeight: number;
+    asset: string;
+    amount: number;
+    denom: string;
+}
+export interface MsgCreateRepayResponse {
+    id: number;
+}
+export interface MsgUpdateRepay {
+    creator: string;
+    id: number;
+    blockHeight: number;
+    asset: string;
+    amount: number;
+    denom: string;
+}
+export interface MsgUpdateRepayResponse {
+}
+export interface MsgDeleteRepay {
+    creator: string;
+    id: number;
+}
+export interface MsgDeleteRepayResponse {
+}
 export declare const MsgCreatePool: {
     encode(message: MsgCreatePool, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCreatePool;
@@ -484,6 +510,48 @@ export declare const MsgDeleteWithdrawResponse: {
     toJSON(_: MsgDeleteWithdrawResponse): unknown;
     fromPartial(_: DeepPartial<MsgDeleteWithdrawResponse>): MsgDeleteWithdrawResponse;
 };
+export declare const MsgCreateRepay: {
+    encode(message: MsgCreateRepay, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateRepay;
+    fromJSON(object: any): MsgCreateRepay;
+    toJSON(message: MsgCreateRepay): unknown;
+    fromPartial(object: DeepPartial<MsgCreateRepay>): MsgCreateRepay;
+};
+export declare const MsgCreateRepayResponse: {
+    encode(message: MsgCreateRepayResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateRepayResponse;
+    fromJSON(object: any): MsgCreateRepayResponse;
+    toJSON(message: MsgCreateRepayResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCreateRepayResponse>): MsgCreateRepayResponse;
+};
+export declare const MsgUpdateRepay: {
+    encode(message: MsgUpdateRepay, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateRepay;
+    fromJSON(object: any): MsgUpdateRepay;
+    toJSON(message: MsgUpdateRepay): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateRepay>): MsgUpdateRepay;
+};
+export declare const MsgUpdateRepayResponse: {
+    encode(_: MsgUpdateRepayResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateRepayResponse;
+    fromJSON(_: any): MsgUpdateRepayResponse;
+    toJSON(_: MsgUpdateRepayResponse): unknown;
+    fromPartial(_: DeepPartial<MsgUpdateRepayResponse>): MsgUpdateRepayResponse;
+};
+export declare const MsgDeleteRepay: {
+    encode(message: MsgDeleteRepay, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgDeleteRepay;
+    fromJSON(object: any): MsgDeleteRepay;
+    toJSON(message: MsgDeleteRepay): unknown;
+    fromPartial(object: DeepPartial<MsgDeleteRepay>): MsgDeleteRepay;
+};
+export declare const MsgDeleteRepayResponse: {
+    encode(_: MsgDeleteRepayResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgDeleteRepayResponse;
+    fromJSON(_: any): MsgDeleteRepayResponse;
+    toJSON(_: MsgDeleteRepayResponse): unknown;
+    fromPartial(_: DeepPartial<MsgDeleteRepayResponse>): MsgDeleteRepayResponse;
+};
 /** Msg defines the Msg service. */
 export interface Msg {
     CreatePool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
@@ -506,8 +574,11 @@ export interface Msg {
     DeleteLoadPoolResponse(request: MsgDeleteLoadPoolResponse): Promise<MsgDeleteLoadPoolResponseResponse>;
     CreateWithdraw(request: MsgCreateWithdraw): Promise<MsgCreateWithdrawResponse>;
     UpdateWithdraw(request: MsgUpdateWithdraw): Promise<MsgUpdateWithdrawResponse>;
-    /** this line is used by starport scaffolding # proto/tx/rpc */
     DeleteWithdraw(request: MsgDeleteWithdraw): Promise<MsgDeleteWithdrawResponse>;
+    CreateRepay(request: MsgCreateRepay): Promise<MsgCreateRepayResponse>;
+    UpdateRepay(request: MsgUpdateRepay): Promise<MsgUpdateRepayResponse>;
+    /** this line is used by starport scaffolding # proto/tx/rpc */
+    DeleteRepay(request: MsgDeleteRepay): Promise<MsgDeleteRepayResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -533,6 +604,9 @@ export declare class MsgClientImpl implements Msg {
     CreateWithdraw(request: MsgCreateWithdraw): Promise<MsgCreateWithdrawResponse>;
     UpdateWithdraw(request: MsgUpdateWithdraw): Promise<MsgUpdateWithdrawResponse>;
     DeleteWithdraw(request: MsgDeleteWithdraw): Promise<MsgDeleteWithdrawResponse>;
+    CreateRepay(request: MsgCreateRepay): Promise<MsgCreateRepayResponse>;
+    UpdateRepay(request: MsgUpdateRepay): Promise<MsgUpdateRepayResponse>;
+    DeleteRepay(request: MsgDeleteRepay): Promise<MsgDeleteRepayResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

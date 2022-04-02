@@ -9,6 +9,7 @@ import { User } from "../wayne/user";
 import { InterfaceApr } from "../wayne/interface_apr";
 import { LoadPoolResponse } from "../wayne/load_pool_response";
 import { Withdraw } from "../wayne/withdraw";
+import { Repay } from "../wayne/repay";
 export const protobufPackage = "cosmonaut.wayne.wayne";
 const baseGenesisState = {
     poolCount: 0,
@@ -18,6 +19,7 @@ const baseGenesisState = {
     interfaceAprCount: 0,
     loadPoolResponseCount: 0,
     withdrawCount: 0,
+    repayCount: 0,
 };
 export const GenesisState = {
     encode(message, writer = Writer.create()) {
@@ -66,6 +68,12 @@ export const GenesisState = {
         if (message.withdrawCount !== 0) {
             writer.uint32(120).uint64(message.withdrawCount);
         }
+        for (const v of message.repayList) {
+            Repay.encode(v, writer.uint32(130).fork()).ldelim();
+        }
+        if (message.repayCount !== 0) {
+            writer.uint32(136).uint64(message.repayCount);
+        }
         return writer;
     },
     decode(input, length) {
@@ -79,6 +87,7 @@ export const GenesisState = {
         message.interfaceAprList = [];
         message.loadPoolResponseList = [];
         message.withdrawList = [];
+        message.repayList = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -127,6 +136,12 @@ export const GenesisState = {
                 case 15:
                     message.withdrawCount = longToNumber(reader.uint64());
                     break;
+                case 16:
+                    message.repayList.push(Repay.decode(reader, reader.uint32()));
+                    break;
+                case 17:
+                    message.repayCount = longToNumber(reader.uint64());
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -143,6 +158,7 @@ export const GenesisState = {
         message.interfaceAprList = [];
         message.loadPoolResponseList = [];
         message.withdrawList = [];
+        message.repayList = [];
         if (object.params !== undefined && object.params !== null) {
             message.params = Params.fromJSON(object.params);
         }
@@ -230,6 +246,17 @@ export const GenesisState = {
         else {
             message.withdrawCount = 0;
         }
+        if (object.repayList !== undefined && object.repayList !== null) {
+            for (const e of object.repayList) {
+                message.repayList.push(Repay.fromJSON(e));
+            }
+        }
+        if (object.repayCount !== undefined && object.repayCount !== null) {
+            message.repayCount = Number(object.repayCount);
+        }
+        else {
+            message.repayCount = 0;
+        }
         return message;
     },
     toJSON(message) {
@@ -290,6 +317,13 @@ export const GenesisState = {
         }
         message.withdrawCount !== undefined &&
             (obj.withdrawCount = message.withdrawCount);
+        if (message.repayList) {
+            obj.repayList = message.repayList.map((e) => e ? Repay.toJSON(e) : undefined);
+        }
+        else {
+            obj.repayList = [];
+        }
+        message.repayCount !== undefined && (obj.repayCount = message.repayCount);
         return obj;
     },
     fromPartial(object) {
@@ -301,6 +335,7 @@ export const GenesisState = {
         message.interfaceAprList = [];
         message.loadPoolResponseList = [];
         message.withdrawList = [];
+        message.repayList = [];
         if (object.params !== undefined && object.params !== null) {
             message.params = Params.fromPartial(object.params);
         }
@@ -387,6 +422,17 @@ export const GenesisState = {
         }
         else {
             message.withdrawCount = 0;
+        }
+        if (object.repayList !== undefined && object.repayList !== null) {
+            for (const e of object.repayList) {
+                message.repayList.push(Repay.fromPartial(e));
+            }
+        }
+        if (object.repayCount !== undefined && object.repayCount !== null) {
+            message.repayCount = object.repayCount;
+        }
+        else {
+            message.repayCount = 0;
         }
         return message;
     },

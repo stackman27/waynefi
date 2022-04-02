@@ -8,6 +8,7 @@ import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
 import { InterfaceApr } from "../wayne/interface_apr";
 import { Withdraw } from "../wayne/withdraw";
+import { Repay } from "../wayne/repay";
 export declare const protobufPackage = "cosmonaut.wayne.wayne";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {
@@ -113,6 +114,19 @@ export interface QueryAllWithdrawRequest {
 }
 export interface QueryAllWithdrawResponse {
     Withdraw: Withdraw[];
+    pagination: PageResponse | undefined;
+}
+export interface QueryGetRepayRequest {
+    id: number;
+}
+export interface QueryGetRepayResponse {
+    Repay: Repay | undefined;
+}
+export interface QueryAllRepayRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryAllRepayResponse {
+    Repay: Repay[];
     pagination: PageResponse | undefined;
 }
 export declare const QueryParamsRequest: {
@@ -339,6 +353,34 @@ export declare const QueryAllWithdrawResponse: {
     toJSON(message: QueryAllWithdrawResponse): unknown;
     fromPartial(object: DeepPartial<QueryAllWithdrawResponse>): QueryAllWithdrawResponse;
 };
+export declare const QueryGetRepayRequest: {
+    encode(message: QueryGetRepayRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetRepayRequest;
+    fromJSON(object: any): QueryGetRepayRequest;
+    toJSON(message: QueryGetRepayRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetRepayRequest>): QueryGetRepayRequest;
+};
+export declare const QueryGetRepayResponse: {
+    encode(message: QueryGetRepayResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetRepayResponse;
+    fromJSON(object: any): QueryGetRepayResponse;
+    toJSON(message: QueryGetRepayResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetRepayResponse>): QueryGetRepayResponse;
+};
+export declare const QueryAllRepayRequest: {
+    encode(message: QueryAllRepayRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllRepayRequest;
+    fromJSON(object: any): QueryAllRepayRequest;
+    toJSON(message: QueryAllRepayRequest): unknown;
+    fromPartial(object: DeepPartial<QueryAllRepayRequest>): QueryAllRepayRequest;
+};
+export declare const QueryAllRepayResponse: {
+    encode(message: QueryAllRepayResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllRepayResponse;
+    fromJSON(object: any): QueryAllRepayResponse;
+    toJSON(message: QueryAllRepayResponse): unknown;
+    fromPartial(object: DeepPartial<QueryAllRepayResponse>): QueryAllRepayResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
@@ -372,6 +414,10 @@ export interface Query {
     Withdraw(request: QueryGetWithdrawRequest): Promise<QueryGetWithdrawResponse>;
     /** Queries a list of Withdraw items. */
     WithdrawAll(request: QueryAllWithdrawRequest): Promise<QueryAllWithdrawResponse>;
+    /** Queries a Repay by id. */
+    Repay(request: QueryGetRepayRequest): Promise<QueryGetRepayResponse>;
+    /** Queries a list of Repay items. */
+    RepayAll(request: QueryAllRepayRequest): Promise<QueryAllRepayResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
@@ -392,6 +438,8 @@ export declare class QueryClientImpl implements Query {
     LoadPoolResponseAll(request: QueryAllLoadPoolResponseRequest): Promise<QueryAllLoadPoolResponseResponse>;
     Withdraw(request: QueryGetWithdrawRequest): Promise<QueryGetWithdrawResponse>;
     WithdrawAll(request: QueryAllWithdrawRequest): Promise<QueryAllWithdrawResponse>;
+    Repay(request: QueryGetRepayRequest): Promise<QueryGetRepayResponse>;
+    RepayAll(request: QueryAllRepayRequest): Promise<QueryAllRepayResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

@@ -165,6 +165,11 @@ export interface WayneMsgCreatePoolResponse {
   id?: string;
 }
 
+export interface WayneMsgCreateRepayResponse {
+  /** @format uint64 */
+  id?: string;
+}
+
 export interface WayneMsgCreateUserResponse {
   /** @format uint64 */
   id?: string;
@@ -185,6 +190,8 @@ export type WayneMsgDeleteLoadPoolResponseResponse = object;
 
 export type WayneMsgDeletePoolResponse = object;
 
+export type WayneMsgDeleteRepayResponse = object;
+
 export type WayneMsgDeleteUserResponse = object;
 
 export type WayneMsgDeleteWithdrawResponse = object;
@@ -198,6 +205,8 @@ export type WayneMsgUpdateInterfaceAprResponse = object;
 export type WayneMsgUpdateLoadPoolResponseResponse = object;
 
 export type WayneMsgUpdatePoolResponse = object;
+
+export type WayneMsgUpdateRepayResponse = object;
 
 export type WayneMsgUpdateUserResponse = object;
 
@@ -302,6 +311,21 @@ export interface WayneQueryAllPoolResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface WayneQueryAllRepayResponse {
+  Repay?: WayneRepay[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface WayneQueryAllUserResponse {
   User?: WayneUser[];
 
@@ -352,6 +376,10 @@ export interface WayneQueryGetPoolResponse {
   Pool?: WaynePool;
 }
 
+export interface WayneQueryGetRepayResponse {
+  Repay?: WayneRepay;
+}
+
 export interface WayneQueryGetUserResponse {
   User?: WayneUser;
 }
@@ -381,6 +409,20 @@ export interface WayneQueryLoadPoolResponse {
 export interface WayneQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: WayneParams;
+}
+
+export interface WayneRepay {
+  /** @format uint64 */
+  id?: string;
+
+  /** @format int32 */
+  blockHeight?: number;
+  asset?: string;
+
+  /** @format int32 */
+  amount?: number;
+  denom?: string;
+  creator?: string;
 }
 
 export interface WayneUser {
@@ -850,6 +892,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryPool = (id: string, params: RequestParams = {}) =>
     this.request<WayneQueryGetPoolResponse, RpcStatus>({
       path: `/cosmonaut/wayne/wayne/pool/${id}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryRepayAll
+   * @summary Queries a list of Repay items.
+   * @request GET:/cosmonaut/wayne/wayne/repay
+   */
+  queryRepayAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<WayneQueryAllRepayResponse, RpcStatus>({
+      path: `/cosmonaut/wayne/wayne/repay`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryRepay
+   * @summary Queries a Repay by id.
+   * @request GET:/cosmonaut/wayne/wayne/repay/{id}
+   */
+  queryRepay = (id: string, params: RequestParams = {}) =>
+    this.request<WayneQueryGetRepayResponse, RpcStatus>({
+      path: `/cosmonaut/wayne/wayne/repay/${id}`,
       method: "GET",
       format: "json",
       ...params,

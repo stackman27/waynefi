@@ -10,6 +10,7 @@ import "wayne/user.proto";
 import "wayne/interface_apr.proto";
 import "wayne/load_pool_response.proto";
 import "wayne/withdraw.proto";
+import "wayne/repay.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
@@ -31,5 +32,7 @@ message GenesisState {
   uint64 loadPoolResponseCount = 13;
   repeated Withdraw withdrawList = 14 [(gogoproto.nullable) = false];
   uint64 withdrawCount = 15;
+  repeated Repay repayList = 16 [(gogoproto.nullable) = false];
+  uint64 repayCount = 17;
   // this line is used by starport scaffolding # genesis/proto/state
 }

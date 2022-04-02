@@ -58,6 +58,13 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// Set withdraw count
 	k.SetWithdrawCount(ctx, genState.WithdrawCount)
+	// Set all the repay
+	for _, elem := range genState.RepayList {
+		k.SetRepay(ctx, elem)
+	}
+
+	// Set repay count
+	k.SetRepayCount(ctx, genState.RepayCount)
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }
@@ -81,6 +88,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.LoadPoolResponseCount = k.GetLoadPoolResponseCount(ctx)
 	genesis.WithdrawList = k.GetAllWithdraw(ctx)
 	genesis.WithdrawCount = k.GetWithdrawCount(ctx)
+	genesis.RepayList = k.GetAllRepay(ctx)
+	genesis.RepayCount = k.GetRepayCount(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

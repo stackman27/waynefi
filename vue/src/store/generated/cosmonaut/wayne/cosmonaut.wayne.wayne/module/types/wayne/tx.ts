@@ -222,6 +222,36 @@ export interface MsgDeleteWithdraw {
 
 export interface MsgDeleteWithdrawResponse {}
 
+export interface MsgCreateRepay {
+  creator: string;
+  blockHeight: number;
+  asset: string;
+  amount: number;
+  denom: string;
+}
+
+export interface MsgCreateRepayResponse {
+  id: number;
+}
+
+export interface MsgUpdateRepay {
+  creator: string;
+  id: number;
+  blockHeight: number;
+  asset: string;
+  amount: number;
+  denom: string;
+}
+
+export interface MsgUpdateRepayResponse {}
+
+export interface MsgDeleteRepay {
+  creator: string;
+  id: number;
+}
+
+export interface MsgDeleteRepayResponse {}
+
 const baseMsgCreatePool: object = {
   creator: "",
   asset: "",
@@ -4071,6 +4101,492 @@ export const MsgDeleteWithdrawResponse = {
   },
 };
 
+const baseMsgCreateRepay: object = {
+  creator: "",
+  blockHeight: 0,
+  asset: "",
+  amount: 0,
+  denom: "",
+};
+
+export const MsgCreateRepay = {
+  encode(message: MsgCreateRepay, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.blockHeight !== 0) {
+      writer.uint32(16).int32(message.blockHeight);
+    }
+    if (message.asset !== "") {
+      writer.uint32(26).string(message.asset);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(32).int32(message.amount);
+    }
+    if (message.denom !== "") {
+      writer.uint32(42).string(message.denom);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateRepay {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgCreateRepay } as MsgCreateRepay;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.blockHeight = reader.int32();
+          break;
+        case 3:
+          message.asset = reader.string();
+          break;
+        case 4:
+          message.amount = reader.int32();
+          break;
+        case 5:
+          message.denom = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateRepay {
+    const message = { ...baseMsgCreateRepay } as MsgCreateRepay;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.blockHeight !== undefined && object.blockHeight !== null) {
+      message.blockHeight = Number(object.blockHeight);
+    } else {
+      message.blockHeight = 0;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = String(object.asset);
+    } else {
+      message.asset = "";
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Number(object.amount);
+    } else {
+      message.amount = 0;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = String(object.denom);
+    } else {
+      message.denom = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateRepay): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.blockHeight !== undefined &&
+      (obj.blockHeight = message.blockHeight);
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.denom !== undefined && (obj.denom = message.denom);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgCreateRepay>): MsgCreateRepay {
+    const message = { ...baseMsgCreateRepay } as MsgCreateRepay;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.blockHeight !== undefined && object.blockHeight !== null) {
+      message.blockHeight = object.blockHeight;
+    } else {
+      message.blockHeight = 0;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    } else {
+      message.asset = "";
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    } else {
+      message.amount = 0;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    } else {
+      message.denom = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateRepayResponse: object = { id: 0 };
+
+export const MsgCreateRepayResponse = {
+  encode(
+    message: MsgCreateRepayResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateRepayResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgCreateRepayResponse } as MsgCreateRepayResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateRepayResponse {
+    const message = { ...baseMsgCreateRepayResponse } as MsgCreateRepayResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateRepayResponse): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateRepayResponse>
+  ): MsgCreateRepayResponse {
+    const message = { ...baseMsgCreateRepayResponse } as MsgCreateRepayResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateRepay: object = {
+  creator: "",
+  id: 0,
+  blockHeight: 0,
+  asset: "",
+  amount: 0,
+  denom: "",
+};
+
+export const MsgUpdateRepay = {
+  encode(message: MsgUpdateRepay, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.id !== 0) {
+      writer.uint32(16).uint64(message.id);
+    }
+    if (message.blockHeight !== 0) {
+      writer.uint32(24).int32(message.blockHeight);
+    }
+    if (message.asset !== "") {
+      writer.uint32(34).string(message.asset);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(40).int32(message.amount);
+    }
+    if (message.denom !== "") {
+      writer.uint32(50).string(message.denom);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateRepay {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdateRepay } as MsgUpdateRepay;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.blockHeight = reader.int32();
+          break;
+        case 4:
+          message.asset = reader.string();
+          break;
+        case 5:
+          message.amount = reader.int32();
+          break;
+        case 6:
+          message.denom = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateRepay {
+    const message = { ...baseMsgUpdateRepay } as MsgUpdateRepay;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    if (object.blockHeight !== undefined && object.blockHeight !== null) {
+      message.blockHeight = Number(object.blockHeight);
+    } else {
+      message.blockHeight = 0;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = String(object.asset);
+    } else {
+      message.asset = "";
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Number(object.amount);
+    } else {
+      message.amount = 0;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = String(object.denom);
+    } else {
+      message.denom = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateRepay): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.id !== undefined && (obj.id = message.id);
+    message.blockHeight !== undefined &&
+      (obj.blockHeight = message.blockHeight);
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.denom !== undefined && (obj.denom = message.denom);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgUpdateRepay>): MsgUpdateRepay {
+    const message = { ...baseMsgUpdateRepay } as MsgUpdateRepay;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    if (object.blockHeight !== undefined && object.blockHeight !== null) {
+      message.blockHeight = object.blockHeight;
+    } else {
+      message.blockHeight = 0;
+    }
+    if (object.asset !== undefined && object.asset !== null) {
+      message.asset = object.asset;
+    } else {
+      message.asset = "";
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    } else {
+      message.amount = 0;
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    } else {
+      message.denom = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateRepayResponse: object = {};
+
+export const MsgUpdateRepayResponse = {
+  encode(_: MsgUpdateRepayResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateRepayResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdateRepayResponse } as MsgUpdateRepayResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateRepayResponse {
+    const message = { ...baseMsgUpdateRepayResponse } as MsgUpdateRepayResponse;
+    return message;
+  },
+
+  toJSON(_: MsgUpdateRepayResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<MsgUpdateRepayResponse>): MsgUpdateRepayResponse {
+    const message = { ...baseMsgUpdateRepayResponse } as MsgUpdateRepayResponse;
+    return message;
+  },
+};
+
+const baseMsgDeleteRepay: object = { creator: "", id: 0 };
+
+export const MsgDeleteRepay = {
+  encode(message: MsgDeleteRepay, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.id !== 0) {
+      writer.uint32(16).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgDeleteRepay {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgDeleteRepay } as MsgDeleteRepay;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteRepay {
+    const message = { ...baseMsgDeleteRepay } as MsgDeleteRepay;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteRepay): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgDeleteRepay>): MsgDeleteRepay {
+    const message = { ...baseMsgDeleteRepay } as MsgDeleteRepay;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteRepayResponse: object = {};
+
+export const MsgDeleteRepayResponse = {
+  encode(_: MsgDeleteRepayResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgDeleteRepayResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgDeleteRepayResponse } as MsgDeleteRepayResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgDeleteRepayResponse {
+    const message = { ...baseMsgDeleteRepayResponse } as MsgDeleteRepayResponse;
+    return message;
+  },
+
+  toJSON(_: MsgDeleteRepayResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<MsgDeleteRepayResponse>): MsgDeleteRepayResponse {
+    const message = { ...baseMsgDeleteRepayResponse } as MsgDeleteRepayResponse;
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreatePool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
@@ -4109,10 +4625,13 @@ export interface Msg {
   UpdateWithdraw(
     request: MsgUpdateWithdraw
   ): Promise<MsgUpdateWithdrawResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   DeleteWithdraw(
     request: MsgDeleteWithdraw
   ): Promise<MsgDeleteWithdrawResponse>;
+  CreateRepay(request: MsgCreateRepay): Promise<MsgCreateRepayResponse>;
+  UpdateRepay(request: MsgUpdateRepay): Promise<MsgUpdateRepayResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  DeleteRepay(request: MsgDeleteRepay): Promise<MsgDeleteRepayResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -4387,6 +4906,42 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgDeleteWithdrawResponse.decode(new Reader(data))
+    );
+  }
+
+  CreateRepay(request: MsgCreateRepay): Promise<MsgCreateRepayResponse> {
+    const data = MsgCreateRepay.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Msg",
+      "CreateRepay",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateRepayResponse.decode(new Reader(data))
+    );
+  }
+
+  UpdateRepay(request: MsgUpdateRepay): Promise<MsgUpdateRepayResponse> {
+    const data = MsgUpdateRepay.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Msg",
+      "UpdateRepay",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateRepayResponse.decode(new Reader(data))
+    );
+  }
+
+  DeleteRepay(request: MsgDeleteRepay): Promise<MsgDeleteRepayResponse> {
+    const data = MsgDeleteRepay.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Msg",
+      "DeleteRepay",
+      data
+    );
+    return promise.then((data) =>
+      MsgDeleteRepayResponse.decode(new Reader(data))
     );
   }
 }

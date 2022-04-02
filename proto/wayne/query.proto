@@ -12,6 +12,7 @@ import "wayne/user.proto";
 import "wayne/interface_apr.proto";
 import "wayne/load_pool_response.proto";
 import "wayne/withdraw.proto";
+import "wayne/repay.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
@@ -94,6 +95,16 @@ service Query {
 	// Queries a list of Withdraw items.
 	rpc WithdrawAll(QueryAllWithdrawRequest) returns (QueryAllWithdrawResponse) {
 		option (google.api.http).get = "/cosmonaut/wayne/wayne/withdraw";
+	}
+
+// Queries a Repay by id.
+	rpc Repay(QueryGetRepayRequest) returns (QueryGetRepayResponse) {
+		option (google.api.http).get = "/cosmonaut/wayne/wayne/repay/{id}";
+	}
+
+	// Queries a list of Repay items.
+	rpc RepayAll(QueryAllRepayRequest) returns (QueryAllRepayResponse) {
+		option (google.api.http).get = "/cosmonaut/wayne/wayne/repay";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -233,6 +244,23 @@ message QueryAllWithdrawRequest {
 
 message QueryAllWithdrawResponse {
 	repeated Withdraw Withdraw = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetRepayRequest {
+	uint64 id = 1;
+}
+
+message QueryGetRepayResponse {
+	Repay Repay = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllRepayRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllRepayResponse {
+	repeated Repay Repay = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

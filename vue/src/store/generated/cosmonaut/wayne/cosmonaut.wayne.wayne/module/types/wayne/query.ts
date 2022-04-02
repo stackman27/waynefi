@@ -13,6 +13,7 @@ import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
 import { InterfaceApr } from "../wayne/interface_apr";
 import { Withdraw } from "../wayne/withdraw";
+import { Repay } from "../wayne/repay";
 
 export const protobufPackage = "cosmonaut.wayne.wayne";
 
@@ -150,6 +151,23 @@ export interface QueryAllWithdrawRequest {
 
 export interface QueryAllWithdrawResponse {
   Withdraw: Withdraw[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetRepayRequest {
+  id: number;
+}
+
+export interface QueryGetRepayResponse {
+  Repay: Repay | undefined;
+}
+
+export interface QueryAllRepayRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllRepayResponse {
+  Repay: Repay[];
   pagination: PageResponse | undefined;
 }
 
@@ -2474,6 +2492,276 @@ export const QueryAllWithdrawResponse = {
   },
 };
 
+const baseQueryGetRepayRequest: object = { id: 0 };
+
+export const QueryGetRepayRequest = {
+  encode(
+    message: QueryGetRepayRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetRepayRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryGetRepayRequest } as QueryGetRepayRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetRepayRequest {
+    const message = { ...baseQueryGetRepayRequest } as QueryGetRepayRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetRepayRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryGetRepayRequest>): QueryGetRepayRequest {
+    const message = { ...baseQueryGetRepayRequest } as QueryGetRepayRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetRepayResponse: object = {};
+
+export const QueryGetRepayResponse = {
+  encode(
+    message: QueryGetRepayResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.Repay !== undefined) {
+      Repay.encode(message.Repay, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetRepayResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryGetRepayResponse } as QueryGetRepayResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Repay = Repay.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetRepayResponse {
+    const message = { ...baseQueryGetRepayResponse } as QueryGetRepayResponse;
+    if (object.Repay !== undefined && object.Repay !== null) {
+      message.Repay = Repay.fromJSON(object.Repay);
+    } else {
+      message.Repay = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetRepayResponse): unknown {
+    const obj: any = {};
+    message.Repay !== undefined &&
+      (obj.Repay = message.Repay ? Repay.toJSON(message.Repay) : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetRepayResponse>
+  ): QueryGetRepayResponse {
+    const message = { ...baseQueryGetRepayResponse } as QueryGetRepayResponse;
+    if (object.Repay !== undefined && object.Repay !== null) {
+      message.Repay = Repay.fromPartial(object.Repay);
+    } else {
+      message.Repay = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllRepayRequest: object = {};
+
+export const QueryAllRepayRequest = {
+  encode(
+    message: QueryAllRepayRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryAllRepayRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryAllRepayRequest } as QueryAllRepayRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllRepayRequest {
+    const message = { ...baseQueryAllRepayRequest } as QueryAllRepayRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllRepayRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryAllRepayRequest>): QueryAllRepayRequest {
+    const message = { ...baseQueryAllRepayRequest } as QueryAllRepayRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllRepayResponse: object = {};
+
+export const QueryAllRepayResponse = {
+  encode(
+    message: QueryAllRepayResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.Repay) {
+      Repay.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryAllRepayResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryAllRepayResponse } as QueryAllRepayResponse;
+    message.Repay = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Repay.push(Repay.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllRepayResponse {
+    const message = { ...baseQueryAllRepayResponse } as QueryAllRepayResponse;
+    message.Repay = [];
+    if (object.Repay !== undefined && object.Repay !== null) {
+      for (const e of object.Repay) {
+        message.Repay.push(Repay.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllRepayResponse): unknown {
+    const obj: any = {};
+    if (message.Repay) {
+      obj.Repay = message.Repay.map((e) => (e ? Repay.toJSON(e) : undefined));
+    } else {
+      obj.Repay = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllRepayResponse>
+  ): QueryAllRepayResponse {
+    const message = { ...baseQueryAllRepayResponse } as QueryAllRepayResponse;
+    message.Repay = [];
+    if (object.Repay !== undefined && object.Repay !== null) {
+      for (const e of object.Repay) {
+        message.Repay.push(Repay.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -2517,6 +2805,10 @@ export interface Query {
   WithdrawAll(
     request: QueryAllWithdrawRequest
   ): Promise<QueryAllWithdrawResponse>;
+  /** Queries a Repay by id. */
+  Repay(request: QueryGetRepayRequest): Promise<QueryGetRepayResponse>;
+  /** Queries a list of Repay items. */
+  RepayAll(request: QueryAllRepayRequest): Promise<QueryAllRepayResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -2725,6 +3017,30 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllWithdrawResponse.decode(new Reader(data))
+    );
+  }
+
+  Repay(request: QueryGetRepayRequest): Promise<QueryGetRepayResponse> {
+    const data = QueryGetRepayRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Query",
+      "Repay",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetRepayResponse.decode(new Reader(data))
+    );
+  }
+
+  RepayAll(request: QueryAllRepayRequest): Promise<QueryAllRepayResponse> {
+    const data = QueryAllRepayRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Query",
+      "RepayAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllRepayResponse.decode(new Reader(data))
     );
   }
 }

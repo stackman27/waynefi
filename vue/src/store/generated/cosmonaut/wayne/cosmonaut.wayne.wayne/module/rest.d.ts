@@ -127,6 +127,10 @@ export interface WayneMsgCreatePoolResponse {
     /** @format uint64 */
     id?: string;
 }
+export interface WayneMsgCreateRepayResponse {
+    /** @format uint64 */
+    id?: string;
+}
 export interface WayneMsgCreateUserResponse {
     /** @format uint64 */
     id?: string;
@@ -140,6 +144,7 @@ export declare type WayneMsgDeleteDepositResponse = object;
 export declare type WayneMsgDeleteInterfaceAprResponse = object;
 export declare type WayneMsgDeleteLoadPoolResponseResponse = object;
 export declare type WayneMsgDeletePoolResponse = object;
+export declare type WayneMsgDeleteRepayResponse = object;
 export declare type WayneMsgDeleteUserResponse = object;
 export declare type WayneMsgDeleteWithdrawResponse = object;
 export declare type WayneMsgUpdateBorrowResponse = object;
@@ -147,6 +152,7 @@ export declare type WayneMsgUpdateDepositResponse = object;
 export declare type WayneMsgUpdateInterfaceAprResponse = object;
 export declare type WayneMsgUpdateLoadPoolResponseResponse = object;
 export declare type WayneMsgUpdatePoolResponse = object;
+export declare type WayneMsgUpdateRepayResponse = object;
 export declare type WayneMsgUpdateUserResponse = object;
 export declare type WayneMsgUpdateWithdrawResponse = object;
 /**
@@ -233,6 +239,19 @@ export interface WayneQueryAllPoolResponse {
      */
     pagination?: V1Beta1PageResponse;
 }
+export interface WayneQueryAllRepayResponse {
+    Repay?: WayneRepay[];
+    /**
+     * PageResponse is to be embedded in gRPC response messages where the
+     * corresponding request message has used PageRequest.
+     *
+     *  message SomeResponse {
+     *          repeated Bar results = 1;
+     *          PageResponse page = 2;
+     *  }
+     */
+    pagination?: V1Beta1PageResponse;
+}
 export interface WayneQueryAllUserResponse {
     User?: WayneUser[];
     /**
@@ -274,6 +293,9 @@ export interface WayneQueryGetLoadPoolResponseResponse {
 export interface WayneQueryGetPoolResponse {
     Pool?: WaynePool;
 }
+export interface WayneQueryGetRepayResponse {
+    Repay?: WayneRepay;
+}
 export interface WayneQueryGetUserResponse {
     User?: WayneUser;
 }
@@ -299,6 +321,17 @@ export interface WayneQueryLoadPoolResponse {
 export interface WayneQueryParamsResponse {
     /** params holds all the parameters of this module. */
     params?: WayneParams;
+}
+export interface WayneRepay {
+    /** @format uint64 */
+    id?: string;
+    /** @format int32 */
+    blockHeight?: number;
+    asset?: string;
+    /** @format int32 */
+    amount?: number;
+    denom?: string;
+    creator?: string;
 }
 export interface WayneUser {
     creator?: string;
@@ -521,6 +554,30 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/cosmonaut/wayne/wayne/pool/{id}
      */
     queryPool: (id: string, params?: RequestParams) => Promise<HttpResponse<WayneQueryGetPoolResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryRepayAll
+     * @summary Queries a list of Repay items.
+     * @request GET:/cosmonaut/wayne/wayne/repay
+     */
+    queryRepayAll: (query?: {
+        "pagination.key"?: string;
+        "pagination.offset"?: string;
+        "pagination.limit"?: string;
+        "pagination.countTotal"?: boolean;
+        "pagination.reverse"?: boolean;
+    }, params?: RequestParams) => Promise<HttpResponse<WayneQueryAllRepayResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryRepay
+     * @summary Queries a Repay by id.
+     * @request GET:/cosmonaut/wayne/wayne/repay/{id}
+     */
+    queryRepay: (id: string, params?: RequestParams) => Promise<HttpResponse<WayneQueryGetRepayResponse, RpcStatus>>;
     /**
      * No description
      *

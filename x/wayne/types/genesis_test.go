@@ -85,6 +85,15 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				WithdrawCount: 2,
+				RepayList: []types.Repay{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				RepayCount: 2,
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -268,6 +277,32 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				WithdrawCount: 0,
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated repay",
+			genState: &types.GenesisState{
+				RepayList: []types.Repay{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid repay count",
+			genState: &types.GenesisState{
+				RepayList: []types.Repay{
+					{
+						Id: 1,
+					},
+				},
+				RepayCount: 0,
 			},
 			valid: false,
 		},

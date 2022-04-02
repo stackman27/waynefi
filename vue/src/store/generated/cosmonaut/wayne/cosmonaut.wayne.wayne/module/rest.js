@@ -313,6 +313,35 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryRepayAll
+         * @summary Queries a list of Repay items.
+         * @request GET:/cosmonaut/wayne/wayne/repay
+         */
+        this.queryRepayAll = (query, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/repay`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryRepay
+         * @summary Queries a Repay by id.
+         * @request GET:/cosmonaut/wayne/wayne/repay/{id}
+         */
+        this.queryRepay = (id, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/repay/${id}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryUserAll
          * @summary Queries a list of User items.
          * @request GET:/cosmonaut/wayne/wayne/user
