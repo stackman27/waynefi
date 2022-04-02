@@ -76,6 +76,15 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				LoadPoolResponseCount: 2,
+				WithdrawList: []types.Withdraw{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				WithdrawCount: 2,
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -233,6 +242,32 @@ func TestGenesisState_Validate(t *testing.T) {
 					},
 				},
 				LoadPoolResponseCount: 0,
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated withdraw",
+			genState: &types.GenesisState{
+				WithdrawList: []types.Withdraw{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid withdraw count",
+			genState: &types.GenesisState{
+				WithdrawList: []types.Withdraw{
+					{
+						Id: 1,
+					},
+				},
+				WithdrawCount: 0,
 			},
 			valid: false,
 		},

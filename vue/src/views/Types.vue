@@ -1,6 +1,7 @@
 	<div>
 		<div class="container">
 			<!-- this line is used by starport scaffolding # 4 -->
+		<SpType modulePath="cosmonaut.wayne.wayne" moduleType="Withdraw"  />
 		<SpType modulePath="cosmonaut.wayne.wayne" moduleType="LoadPoolResponse"  />
 		<SpType modulePath="cosmonaut.wayne.wayne" moduleType="InterfaceApr"  />
 		<SpType modulePath="cosmonaut.wayne.wayne" moduleType="User"  />

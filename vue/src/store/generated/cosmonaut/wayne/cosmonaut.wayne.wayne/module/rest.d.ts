@@ -131,18 +131,24 @@ export interface WayneMsgCreateUserResponse {
     /** @format uint64 */
     id?: string;
 }
+export interface WayneMsgCreateWithdrawResponse {
+    /** @format uint64 */
+    id?: string;
+}
 export declare type WayneMsgDeleteBorrowResponse = object;
 export declare type WayneMsgDeleteDepositResponse = object;
 export declare type WayneMsgDeleteInterfaceAprResponse = object;
 export declare type WayneMsgDeleteLoadPoolResponseResponse = object;
 export declare type WayneMsgDeletePoolResponse = object;
 export declare type WayneMsgDeleteUserResponse = object;
+export declare type WayneMsgDeleteWithdrawResponse = object;
 export declare type WayneMsgUpdateBorrowResponse = object;
 export declare type WayneMsgUpdateDepositResponse = object;
 export declare type WayneMsgUpdateInterfaceAprResponse = object;
 export declare type WayneMsgUpdateLoadPoolResponseResponse = object;
 export declare type WayneMsgUpdatePoolResponse = object;
 export declare type WayneMsgUpdateUserResponse = object;
+export declare type WayneMsgUpdateWithdrawResponse = object;
 /**
  * Params defines the parameters for the module.
  */
@@ -240,6 +246,19 @@ export interface WayneQueryAllUserResponse {
      */
     pagination?: V1Beta1PageResponse;
 }
+export interface WayneQueryAllWithdrawResponse {
+    Withdraw?: WayneWithdraw[];
+    /**
+     * PageResponse is to be embedded in gRPC response messages where the
+     * corresponding request message has used PageRequest.
+     *
+     *  message SomeResponse {
+     *          repeated Bar results = 1;
+     *          PageResponse page = 2;
+     *  }
+     */
+    pagination?: V1Beta1PageResponse;
+}
 export interface WayneQueryGetBorrowResponse {
     Borrow?: WayneBorrow;
 }
@@ -257,6 +276,9 @@ export interface WayneQueryGetPoolResponse {
 }
 export interface WayneQueryGetUserResponse {
     User?: WayneUser;
+}
+export interface WayneQueryGetWithdrawResponse {
+    Withdraw?: WayneWithdraw;
 }
 export interface WayneQueryLoadPoolResponse {
     LoadPoolResponse?: WayneLoadPoolResponse[];
@@ -286,6 +308,17 @@ export interface WayneUser {
     deposit?: WayneDeposit[];
     borrow?: WayneBorrow[];
     assetBalances?: number[];
+}
+export interface WayneWithdraw {
+    /** @format uint64 */
+    id?: string;
+    /** @format int32 */
+    blockHeight?: number;
+    asset?: string;
+    /** @format int32 */
+    amount?: number;
+    denom?: string;
+    creator?: string;
 }
 export declare type QueryParamsType = Record<string | number, any>;
 export declare type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
@@ -512,5 +545,29 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/cosmonaut/wayne/wayne/user/{id}
      */
     queryUser: (id: string, params?: RequestParams) => Promise<HttpResponse<WayneQueryGetUserResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryWithdrawAll
+     * @summary Queries a list of Withdraw items.
+     * @request GET:/cosmonaut/wayne/wayne/withdraw
+     */
+    queryWithdrawAll: (query?: {
+        "pagination.key"?: string;
+        "pagination.offset"?: string;
+        "pagination.limit"?: string;
+        "pagination.countTotal"?: boolean;
+        "pagination.reverse"?: boolean;
+    }, params?: RequestParams) => Promise<HttpResponse<WayneQueryAllWithdrawResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryWithdraw
+     * @summary Queries a Withdraw by id.
+     * @request GET:/cosmonaut/wayne/wayne/withdraw/{id}
+     */
+    queryWithdraw: (id: string, params?: RequestParams) => Promise<HttpResponse<WayneQueryGetWithdrawResponse, RpcStatus>>;
 }
 export {};

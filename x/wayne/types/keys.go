@@ -50,3 +50,8 @@ const (
 	LoadPoolResponseKey      = "LoadPoolResponse-value-"
 	LoadPoolResponseCountKey = "LoadPoolResponse-count-"
 )
+
+const (
+	WithdrawKey      = "Withdraw-value-"
+	WithdrawCountKey = "Withdraw-count-"
+)

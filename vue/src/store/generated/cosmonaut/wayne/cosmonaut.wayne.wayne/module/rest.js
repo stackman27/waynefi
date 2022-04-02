@@ -338,5 +338,34 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryWithdrawAll
+         * @summary Queries a list of Withdraw items.
+         * @request GET:/cosmonaut/wayne/wayne/withdraw
+         */
+        this.queryWithdrawAll = (query, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/withdraw`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryWithdraw
+         * @summary Queries a Withdraw by id.
+         * @request GET:/cosmonaut/wayne/wayne/withdraw/{id}
+         */
+        this.queryWithdraw = (id, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/withdraw/${id}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
     }
 }

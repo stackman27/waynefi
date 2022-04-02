@@ -5,6 +5,7 @@ import { LoadPoolResponse } from "./module/types/wayne/load_pool_response";
 import { Params } from "./module/types/wayne/params";
 import { Pool } from "./module/types/wayne/pool";
 import { User } from "./module/types/wayne/user";
-export { Borrow, Deposit, InterfaceApr, LoadPoolResponse, Params, Pool, User };
+import { Withdraw } from "./module/types/wayne/withdraw";
+export { Borrow, Deposit, InterfaceApr, LoadPoolResponse, Params, Pool, User, Withdraw };
 declare const _default;
 export default _default;

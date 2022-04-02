@@ -7,6 +7,7 @@ import "wayne/borrow.proto";
 import "wayne/user.proto";
 import "wayne/interface_apr.proto";
 import "wayne/load_pool_response.proto";
+import "wayne/withdraw.proto";
 // this line is used by starport scaffolding # proto/tx/import
 
 option go_package = "github.com/cosmonaut/wayne/x/wayne/types";
@@ -31,6 +32,9 @@ rpc CreateInterfaceApr(MsgCreateInterfaceApr) returns (MsgCreateInterfaceAprResp
 rpc CreateLoadPoolResponse(MsgCreateLoadPoolResponse) returns (MsgCreateLoadPoolResponseResponse);
   rpc UpdateLoadPoolResponse(MsgUpdateLoadPoolResponse) returns (MsgUpdateLoadPoolResponseResponse);
   rpc DeleteLoadPoolResponse(MsgDeleteLoadPoolResponse) returns (MsgDeleteLoadPoolResponseResponse);
+rpc CreateWithdraw(MsgCreateWithdraw) returns (MsgCreateWithdrawResponse);
+  rpc UpdateWithdraw(MsgUpdateWithdraw) returns (MsgUpdateWithdrawResponse);
+  rpc DeleteWithdraw(MsgDeleteWithdraw) returns (MsgDeleteWithdrawResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -217,5 +221,35 @@ message MsgDeleteLoadPoolResponse {
 }
 
 message MsgDeleteLoadPoolResponseResponse {}
+
+message MsgCreateWithdraw {
+  string creator = 1;
+  int32 blockHeight = 2;
+  string asset = 3;
+  int32 amount = 4;
+  string denom = 5;
+}
+
+message MsgCreateWithdrawResponse {
+  uint64 id = 1;
+}
+
+message MsgUpdateWithdraw {
+  string creator = 1;
+  uint64 id = 2;
+  int32 blockHeight = 3;
+  string asset = 4;
+  int32 amount = 5;
+  string denom = 6;
+}
+
+message MsgUpdateWithdrawResponse {}
+
+message MsgDeleteWithdraw {
+  string creator = 1;
+  uint64 id = 2;
+}
+
+message MsgDeleteWithdrawResponse {}
 
 // this line is used by starport scaffolding # proto/tx/message

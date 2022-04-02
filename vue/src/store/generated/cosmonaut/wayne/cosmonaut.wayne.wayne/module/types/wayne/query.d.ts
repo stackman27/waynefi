@@ -7,6 +7,7 @@ import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
 import { InterfaceApr } from "../wayne/interface_apr";
+import { Withdraw } from "../wayne/withdraw";
 export declare const protobufPackage = "cosmonaut.wayne.wayne";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {
@@ -99,6 +100,19 @@ export interface QueryAllLoadPoolResponseRequest {
 }
 export interface QueryAllLoadPoolResponseResponse {
     LoadPoolResponse: LoadPoolResponse[];
+    pagination: PageResponse | undefined;
+}
+export interface QueryGetWithdrawRequest {
+    id: number;
+}
+export interface QueryGetWithdrawResponse {
+    Withdraw: Withdraw | undefined;
+}
+export interface QueryAllWithdrawRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryAllWithdrawResponse {
+    Withdraw: Withdraw[];
     pagination: PageResponse | undefined;
 }
 export declare const QueryParamsRequest: {
@@ -297,6 +311,34 @@ export declare const QueryAllLoadPoolResponseResponse: {
     toJSON(message: QueryAllLoadPoolResponseResponse): unknown;
     fromPartial(object: DeepPartial<QueryAllLoadPoolResponseResponse>): QueryAllLoadPoolResponseResponse;
 };
+export declare const QueryGetWithdrawRequest: {
+    encode(message: QueryGetWithdrawRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetWithdrawRequest;
+    fromJSON(object: any): QueryGetWithdrawRequest;
+    toJSON(message: QueryGetWithdrawRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetWithdrawRequest>): QueryGetWithdrawRequest;
+};
+export declare const QueryGetWithdrawResponse: {
+    encode(message: QueryGetWithdrawResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetWithdrawResponse;
+    fromJSON(object: any): QueryGetWithdrawResponse;
+    toJSON(message: QueryGetWithdrawResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetWithdrawResponse>): QueryGetWithdrawResponse;
+};
+export declare const QueryAllWithdrawRequest: {
+    encode(message: QueryAllWithdrawRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllWithdrawRequest;
+    fromJSON(object: any): QueryAllWithdrawRequest;
+    toJSON(message: QueryAllWithdrawRequest): unknown;
+    fromPartial(object: DeepPartial<QueryAllWithdrawRequest>): QueryAllWithdrawRequest;
+};
+export declare const QueryAllWithdrawResponse: {
+    encode(message: QueryAllWithdrawResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllWithdrawResponse;
+    fromJSON(object: any): QueryAllWithdrawResponse;
+    toJSON(message: QueryAllWithdrawResponse): unknown;
+    fromPartial(object: DeepPartial<QueryAllWithdrawResponse>): QueryAllWithdrawResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
@@ -326,6 +368,10 @@ export interface Query {
     LoadPoolResponse(request: QueryGetLoadPoolResponseRequest): Promise<QueryGetLoadPoolResponseResponse>;
     /** Queries a list of LoadPoolResponse items. */
     LoadPoolResponseAll(request: QueryAllLoadPoolResponseRequest): Promise<QueryAllLoadPoolResponseResponse>;
+    /** Queries a Withdraw by id. */
+    Withdraw(request: QueryGetWithdrawRequest): Promise<QueryGetWithdrawResponse>;
+    /** Queries a list of Withdraw items. */
+    WithdrawAll(request: QueryAllWithdrawRequest): Promise<QueryAllWithdrawResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
@@ -344,6 +390,8 @@ export declare class QueryClientImpl implements Query {
     InterfaceAprAll(request: QueryAllInterfaceAprRequest): Promise<QueryAllInterfaceAprResponse>;
     LoadPoolResponse(request: QueryGetLoadPoolResponseRequest): Promise<QueryGetLoadPoolResponseResponse>;
     LoadPoolResponseAll(request: QueryAllLoadPoolResponseRequest): Promise<QueryAllLoadPoolResponseResponse>;
+    Withdraw(request: QueryGetWithdrawRequest): Promise<QueryGetWithdrawResponse>;
+    WithdrawAll(request: QueryAllWithdrawRequest): Promise<QueryAllWithdrawResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

@@ -164,6 +164,32 @@ export interface MsgDeleteLoadPoolResponse {
 }
 export interface MsgDeleteLoadPoolResponseResponse {
 }
+export interface MsgCreateWithdraw {
+    creator: string;
+    blockHeight: number;
+    asset: string;
+    amount: number;
+    denom: string;
+}
+export interface MsgCreateWithdrawResponse {
+    id: number;
+}
+export interface MsgUpdateWithdraw {
+    creator: string;
+    id: number;
+    blockHeight: number;
+    asset: string;
+    amount: number;
+    denom: string;
+}
+export interface MsgUpdateWithdrawResponse {
+}
+export interface MsgDeleteWithdraw {
+    creator: string;
+    id: number;
+}
+export interface MsgDeleteWithdrawResponse {
+}
 export declare const MsgCreatePool: {
     encode(message: MsgCreatePool, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCreatePool;
@@ -416,6 +442,48 @@ export declare const MsgDeleteLoadPoolResponseResponse: {
     toJSON(_: MsgDeleteLoadPoolResponseResponse): unknown;
     fromPartial(_: DeepPartial<MsgDeleteLoadPoolResponseResponse>): MsgDeleteLoadPoolResponseResponse;
 };
+export declare const MsgCreateWithdraw: {
+    encode(message: MsgCreateWithdraw, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateWithdraw;
+    fromJSON(object: any): MsgCreateWithdraw;
+    toJSON(message: MsgCreateWithdraw): unknown;
+    fromPartial(object: DeepPartial<MsgCreateWithdraw>): MsgCreateWithdraw;
+};
+export declare const MsgCreateWithdrawResponse: {
+    encode(message: MsgCreateWithdrawResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateWithdrawResponse;
+    fromJSON(object: any): MsgCreateWithdrawResponse;
+    toJSON(message: MsgCreateWithdrawResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCreateWithdrawResponse>): MsgCreateWithdrawResponse;
+};
+export declare const MsgUpdateWithdraw: {
+    encode(message: MsgUpdateWithdraw, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateWithdraw;
+    fromJSON(object: any): MsgUpdateWithdraw;
+    toJSON(message: MsgUpdateWithdraw): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateWithdraw>): MsgUpdateWithdraw;
+};
+export declare const MsgUpdateWithdrawResponse: {
+    encode(_: MsgUpdateWithdrawResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateWithdrawResponse;
+    fromJSON(_: any): MsgUpdateWithdrawResponse;
+    toJSON(_: MsgUpdateWithdrawResponse): unknown;
+    fromPartial(_: DeepPartial<MsgUpdateWithdrawResponse>): MsgUpdateWithdrawResponse;
+};
+export declare const MsgDeleteWithdraw: {
+    encode(message: MsgDeleteWithdraw, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgDeleteWithdraw;
+    fromJSON(object: any): MsgDeleteWithdraw;
+    toJSON(message: MsgDeleteWithdraw): unknown;
+    fromPartial(object: DeepPartial<MsgDeleteWithdraw>): MsgDeleteWithdraw;
+};
+export declare const MsgDeleteWithdrawResponse: {
+    encode(_: MsgDeleteWithdrawResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgDeleteWithdrawResponse;
+    fromJSON(_: any): MsgDeleteWithdrawResponse;
+    toJSON(_: MsgDeleteWithdrawResponse): unknown;
+    fromPartial(_: DeepPartial<MsgDeleteWithdrawResponse>): MsgDeleteWithdrawResponse;
+};
 /** Msg defines the Msg service. */
 export interface Msg {
     CreatePool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
@@ -435,8 +503,11 @@ export interface Msg {
     DeleteInterfaceApr(request: MsgDeleteInterfaceApr): Promise<MsgDeleteInterfaceAprResponse>;
     CreateLoadPoolResponse(request: MsgCreateLoadPoolResponse): Promise<MsgCreateLoadPoolResponseResponse>;
     UpdateLoadPoolResponse(request: MsgUpdateLoadPoolResponse): Promise<MsgUpdateLoadPoolResponseResponse>;
-    /** this line is used by starport scaffolding # proto/tx/rpc */
     DeleteLoadPoolResponse(request: MsgDeleteLoadPoolResponse): Promise<MsgDeleteLoadPoolResponseResponse>;
+    CreateWithdraw(request: MsgCreateWithdraw): Promise<MsgCreateWithdrawResponse>;
+    UpdateWithdraw(request: MsgUpdateWithdraw): Promise<MsgUpdateWithdrawResponse>;
+    /** this line is used by starport scaffolding # proto/tx/rpc */
+    DeleteWithdraw(request: MsgDeleteWithdraw): Promise<MsgDeleteWithdrawResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -459,6 +530,9 @@ export declare class MsgClientImpl implements Msg {
     CreateLoadPoolResponse(request: MsgCreateLoadPoolResponse): Promise<MsgCreateLoadPoolResponseResponse>;
     UpdateLoadPoolResponse(request: MsgUpdateLoadPoolResponse): Promise<MsgUpdateLoadPoolResponseResponse>;
     DeleteLoadPoolResponse(request: MsgDeleteLoadPoolResponse): Promise<MsgDeleteLoadPoolResponseResponse>;
+    CreateWithdraw(request: MsgCreateWithdraw): Promise<MsgCreateWithdrawResponse>;
+    UpdateWithdraw(request: MsgUpdateWithdraw): Promise<MsgUpdateWithdrawResponse>;
+    DeleteWithdraw(request: MsgDeleteWithdraw): Promise<MsgDeleteWithdrawResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

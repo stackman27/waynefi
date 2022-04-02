@@ -68,6 +68,15 @@ func TestGenesis(t *testing.T) {
 			},
 		},
 		LoadPoolResponseCount: 2,
+		WithdrawList: []types.Withdraw{
+			{
+				Id: 0,
+			},
+			{
+				Id: 1,
+			},
+		},
+		WithdrawCount: 2,
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -91,5 +100,7 @@ func TestGenesis(t *testing.T) {
 	require.Equal(t, genesisState.InterfaceAprCount, got.InterfaceAprCount)
 	require.ElementsMatch(t, genesisState.LoadPoolResponseList, got.LoadPoolResponseList)
 	require.Equal(t, genesisState.LoadPoolResponseCount, got.LoadPoolResponseCount)
+	require.ElementsMatch(t, genesisState.WithdrawList, got.WithdrawList)
+	require.Equal(t, genesisState.WithdrawCount, got.WithdrawCount)
 	// this line is used by starport scaffolding # genesis/test/assert
 }
