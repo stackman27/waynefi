@@ -26,6 +26,49 @@ func (k msgServer) CreateDeposit(goCtx context.Context, msg *types.MsgCreateDepo
 
 	*/
 
+	// GET TOKEN WITH DENOM
+	feeCoins, err := sdk.ParseCoinsNormalized(fmt.Sprint(msg.Amount, msg.Denom))
+	if err != nil {
+		return nil, err
+	}
+
+	// GET THE USER WHO IS TRYNA DEPOSIT
+	userList := k.GetAllUser(ctx)
+	var queryUser types.User
+	for _, user := range userList {
+		if user.Creator == msg.Creator {
+			queryUser = user
+		}
+	}
+	queryUser.Deposit = append(queryUser.Deposit, &deposit)
+	creatorAddress, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, err
+	}
+
+	// SUBTRACT THE AMOUNT FROM USER ADDRESS AND SEND THE AMOUNT TO THE MODULE
+	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, creatorAddress, types.ModuleName, feeCoins)
+	if err != nil {
+		return nil, err
+	}
+
+	// BURN THE TOKENS THAT HAS BEEN DEPOSITED
+	err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, feeCoins)
+	if err != nil {
+		return nil, err
+	}
+
+	// DEPOSIT THE ASSET IN THE SPECIFIED POOL
+	poolList := k.GetAllPool(ctx)
+	var queryPool types.Pool
+	for _, pool := range poolList {
+		if pool.Asset == msg.Asset {
+			queryPool = pool
+		}
+	}
+	queryPool.DepositBalance = queryPool.DepositBalance + msg.Amount
+	k.SetPool(ctx, queryPool)
+
 	id := k.AppendDeposit(
 		ctx,
 		deposit,

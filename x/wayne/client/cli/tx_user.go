@@ -12,9 +12,9 @@ import (
 
 func CmdCreateUser() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-user [collateral] [deposit] [borrow]",
+		Use:   "create-user",
 		Short: "Create a new user",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 
 			argsCollateral := []bool{false, false, false, false, false, false}

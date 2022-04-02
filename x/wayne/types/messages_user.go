@@ -15,10 +15,11 @@ var _ sdk.Msg = &MsgCreateUser{}
 
 func NewMsgCreateUser(creator string, collateral []bool, deposit []*Deposit, borrow []*Borrow, assetBalances []int32) *MsgCreateUser {
 	return &MsgCreateUser{
-		Creator:    creator,
-		Collateral: collateral,
-		Deposit:    deposit,
-		Borrow:     borrow,
+		Creator:       creator,
+		Collateral:    collateral,
+		Deposit:       deposit,
+		Borrow:        borrow,
+		AssetBalances: assetBalances,
 	}
 }
 

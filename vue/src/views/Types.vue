@@ -12,3 +12,19 @@
 		</div>
 	</div>
 </template>
+
+
+	if err := k.bankKeeper.AddCoins(ctx, creatorAddress, feeCoins); err != nil {
+		return nil, err
+	}
+
+	poolList := k.GetAllPool(ctx)
+	var queryPool types.Pool
+	for _, pool := range poolList {
+		if pool.Asset == msg.Asset {
+			queryPool = pool
+		}
+	}
+	queryPool.BorrowBalance = queryPool.BorrowBalance + msg.Amount
+	k.SetPool(ctx, queryPool)
+	//TODO : add collateral logic to borrowing
