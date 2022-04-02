@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"math"
 
 	"github.com/cosmonaut/wayne/x/wayne/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -60,16 +59,15 @@ func (k Keeper) PoolLoad(c context.Context, req *types.QueryLoadPoolRequest) (*t
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	// var pool types.Pool
 	ctx := sdk.UnwrapSDKContext(c)
 
 	poolList := k.GetAllPool(ctx)
 	var loadPoolList []*types.LoadPoolResponse
-	var loadPool types.LoadPoolResponse
 	for _, msg := range poolList {
-		// TODO: Change the way we calculate APR for WAYNE FINANCE
+		var loadPool types.LoadPoolResponse
 		currentTargetBorrowRatio := float64(msg.BorrowBalance) / float64(msg.DepositBalance)
-		currentDepositApy := types.DepositInterest + types.DepositInterest*math.Abs(currentTargetBorrowRatio-float64(types.TargetBorrowRatio)*0.01)*types.InterestFactor
+		currentDepositApy := types.DepositInterest + types.DepositInterest*(currentTargetBorrowRatio-float64(types.TargetBorrowRatio)*0.01)*types.InterestFactor
+		// 	currentDepositApy = math.Max(currentDepositApy, types.MinimumDepositInterest)
 		loadPool.Asset = msg.Asset
 		loadPool.CollatoralFactor = msg.CollatoralFactor
 		loadPool.Liquidity = msg.DepositBalance - msg.BorrowBalance
@@ -78,7 +76,6 @@ func (k Keeper) PoolLoad(c context.Context, req *types.QueryLoadPoolRequest) (*t
 
 		loadPoolList = append(loadPoolList, &loadPool)
 	}
-	// k.cdc.MustUnmarshalBinaryBare(store.Get(GetPoolIDBytes(req.Id)), &pool)
 
 	return &types.QueryLoadPoolResponse{LoadPoolResponse: loadPoolList}, nil
 }
