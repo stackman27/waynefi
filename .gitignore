@@ -5,4 +5,4 @@ release/
 .idea/
 .vscode/
 .DS_Store
-generated/
+**/generated/
