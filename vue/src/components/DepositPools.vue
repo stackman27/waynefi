@@ -1,5 +1,6 @@
 <template>
   <div class="user-deposit">
+    <SpAcc />
     <div class="deposit-status">
       <div class="deposit-balance">
         <div class="title">Deposit Pools</div>
@@ -95,8 +96,10 @@
 </style>
 
 <script>
+import { SpAcc } from "@starport/vue";
 export default {
   name: "DepositPools",
+  components: { SpAcc },
   computed: {
     pools() {
       const loggedAddress = this.$store.getters["common/wallet/address"];
