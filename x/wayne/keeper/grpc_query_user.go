@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	"github.com/cosmonaut/wayne/x/wayne/oracle"
 	"github.com/cosmonaut/wayne/x/wayne/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -80,13 +79,13 @@ func (k Keeper) UserLoad(c context.Context, req *types.QueryLoadUserRequest) (*t
 	}
 
 	assetBalances := k.bankKeeper.GetAllBalances(ctx, userAddress)[1:]
-	assetPrices := oracle.GetAllPrices()
+	//assetPrices := oracle.GetAllPrices()
 
 	for i := 0; i < assetBalances.Len(); i++ {
 		var userAsset types.LoadUserResponse
 		userAsset.AssetBalance = assetBalances[i].Amount.Int64()
 		userAsset.AssetDenom = assetBalances[i].Denom
-		userAsset.AssetPrice = int32(assetPrices[i] * 1000000)
+		//userAsset.AssetPrice = int32(assetPrices[i] * 1000000)
 		userAsset.Collateral = queryUser.Collateral[i]
 		userAsset.AssetDeposit = queryUser.Deposit[i].Amount
 		userAsset.AssetBorrow = queryUser.Borrow[i].Amount

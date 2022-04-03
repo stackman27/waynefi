@@ -13,9 +13,9 @@
 			</div>
 			<div v-if="Array.isArray(pools)" class="table-rows">
 				<div v-for="pool in pools" v-bind:key="pool.id" class="table-row" @click="clickAsset(pool)">
-					<div class="table-cell">{{ pool.asset }}</div>
+					<div class="table-cell"> <img :src = "`../../public/assets/${pool.asset}.png`" class = "logos"/> &nbsp;  &nbsp; {{ pool.asset }}</div>
 					<div class="table-cell">{{ pool.borrowApy / 10000 }}%</div>
-					<div class="table-cell">{{ `${parseFloat(pool.liquidity / 1000000)} ${pool.asset}`}}</div>
+					<div class="table-cell">{{ `${parseFloat(pool.liquidity / 100000)} ${pool.asset}`}}</div>
 				</div>
 			</div>
 			<div v-else class="table-rows">
@@ -38,8 +38,17 @@
 	display: flex;
 	justify-content: space-between;
 }
+
+.logos {
+	height: 30px;
+	width: 30px;
+	margin-bottom: -20px;
+}
+
+
 .title {
 	font-size: 20px;
+		font-weight: 800;
 }
 .value {
 	font-size: 26px;
@@ -47,24 +56,25 @@
 }
 .asset-table {
 	margin-top: 16px;
-	padding: 12px;
-	border: 1px solid white;
-	border-radius: 10px;
+		padding: 20px;
+	border: 1px solid #bbb;
+	border-radius: 5px;
 }
 .table-header {
 	display: flex;
 	padding: 8px 12px;
-	color: rgba(255, 255, 255, 0.7);
-	font-size: 14px;
+	color: black;
+	font-weight: 600;
+	font-size: 16px;
 }
 .table-row {
 	display: flex;
-	padding: 8px 12px 7px;
-	border-radius: 5px;
+	padding: 20px;
+border-bottom: 1px solid #bbb;
 }
 .table-row:hover {
 	cursor: pointer;
-	background: rgba(0, 0, 0, 0.5);
+	background: #eee;
 }
 .table-cell {
 	width: 100%;

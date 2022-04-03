@@ -1,5 +1,5 @@
 <template>
-	<div v-if="initialized" class="container">
+	<div v-if="initialized">
 		<Header />
 		<router-view />
 	</div>

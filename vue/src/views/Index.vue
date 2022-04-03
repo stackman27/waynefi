@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div>
 		<div class="pools">
 			<DepositPools @click-asset="openModal" />
 			<BorrowPools @click-asset="openModal" />
@@ -15,11 +15,8 @@
 .pools {
 	margin-top: 48px;
 	display: flex;
-}
-.nftList {
-	margin-top: 48px;
-	padding-bottom: 48px;
-}
+	background: 'blue';
+} 
 </style>
 
 <script>
