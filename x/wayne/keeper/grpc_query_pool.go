@@ -75,7 +75,6 @@ func (k Keeper) PoolLoad(c context.Context, req *types.QueryLoadPoolRequest) (*t
 		loadPool.Liquidity = msg.DepositBalance - msg.BorrowBalance
 		loadPool.DepositApy = int32(currentDepositApy * 1000000)
 		loadPool.BorrowApy = int32(currentDepositApy / currentTargetBorrowRatio * 1000000)
-
 		loadPoolList = append(loadPoolList, &loadPool)
 	}
 

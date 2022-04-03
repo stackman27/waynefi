@@ -1,6 +1,7 @@
 <template>
 	<div class="header-wrapper">
 		<div class="logo">Wayne Finance</div>
+		<SpAcc />
 	</div>
 </template>
 
@@ -18,8 +19,10 @@
 </style>
 
 <script>
+import { SpAcc } from "@starport/vue";
 export default {
 	name: 'Header',
+	components: { SpAcc },
 	data() {
 		return {}
 	},

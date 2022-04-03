@@ -241,6 +241,19 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryUserLoad
+         * @request GET:/cosmonaut/wayne/wayne/loadUser/{id}
+         */
+        this.queryUserLoad = (id, params = {}) => this.request({
+            path: `/cosmonaut/wayne/wayne/loadUser/${id}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryLoadPoolResponseAll
          * @summary Queries a list of LoadPoolResponse items.
          * @request GET:/cosmonaut/wayne/wayne/load_pool_response

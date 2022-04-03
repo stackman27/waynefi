@@ -1,18 +1,11 @@
 <template>
 	<div class="container">
-		<div class="user">
-			<UserDeposit @click-asset="openModal" />
-			<UserBorrow @click-asset="openModal" />
-		</div>
+	 
 		<div class="pools">
-			<DepositPools @click-asset="openModal" />
-			<BorrowPools @click-asset="openModal" />
-		</div>
-		<div class="nftList">
-			<NftList @click-nft-card="openNftModal" />
-		</div>
-		<Modal v-bind="pool" v-bind:initialType="type" v-if="isModalOpen" @click-outside="closeModal" />
-		<NftModal v-bind="nft" v-bind:initialType="type" v-if="isNftModalOpen" @click-outside="closeNftModal" />
+			<DepositPools  />
+			<BorrowPools />
+		</div> 
+		  
 	</div>
 </template>
 
@@ -38,9 +31,7 @@ import BorrowPools from '../components/BorrowPools.vue'
 export default {
 	name: 'Index',
 	data() {
-		return {
-			isModalOpen: false,
-			isNftModalOpen: false,
+		return { 
 			pool: null,
 			nft: null,
 			type: ''
@@ -64,7 +55,7 @@ export default {
 	components: { 
 		DepositPools,
 		BorrowPools,
-	 
+ 
 	}
 }
 </script>

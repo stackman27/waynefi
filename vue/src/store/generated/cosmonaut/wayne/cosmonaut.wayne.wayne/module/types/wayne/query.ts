@@ -7,7 +7,10 @@ import {
   PageRequest,
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
-import { LoadPoolResponse } from "../wayne/load_pool_response";
+import {
+  LoadPoolResponse,
+  LoadUserResponse,
+} from "../wayne/load_pool_response";
 import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
@@ -101,6 +104,14 @@ export interface QueryAllUserRequest {
 export interface QueryAllUserResponse {
   User: User[];
   pagination: PageResponse | undefined;
+}
+
+export interface QueryLoadUserRequest {
+  id: string;
+}
+
+export interface QueryLoadUserResponse {
+  LoadUserResponse: LoadUserResponse[];
 }
 
 export interface QueryGetInterfaceAprRequest {
@@ -1527,6 +1538,141 @@ export const QueryAllUserResponse = {
   },
 };
 
+const baseQueryLoadUserRequest: object = { id: "" };
+
+export const QueryLoadUserRequest = {
+  encode(
+    message: QueryLoadUserRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryLoadUserRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryLoadUserRequest } as QueryLoadUserRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryLoadUserRequest {
+    const message = { ...baseQueryLoadUserRequest } as QueryLoadUserRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryLoadUserRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryLoadUserRequest>): QueryLoadUserRequest {
+    const message = { ...baseQueryLoadUserRequest } as QueryLoadUserRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryLoadUserResponse: object = {};
+
+export const QueryLoadUserResponse = {
+  encode(
+    message: QueryLoadUserResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.LoadUserResponse) {
+      LoadUserResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryLoadUserResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryLoadUserResponse } as QueryLoadUserResponse;
+    message.LoadUserResponse = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.LoadUserResponse.push(
+            LoadUserResponse.decode(reader, reader.uint32())
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryLoadUserResponse {
+    const message = { ...baseQueryLoadUserResponse } as QueryLoadUserResponse;
+    message.LoadUserResponse = [];
+    if (
+      object.LoadUserResponse !== undefined &&
+      object.LoadUserResponse !== null
+    ) {
+      for (const e of object.LoadUserResponse) {
+        message.LoadUserResponse.push(LoadUserResponse.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: QueryLoadUserResponse): unknown {
+    const obj: any = {};
+    if (message.LoadUserResponse) {
+      obj.LoadUserResponse = message.LoadUserResponse.map((e) =>
+        e ? LoadUserResponse.toJSON(e) : undefined
+      );
+    } else {
+      obj.LoadUserResponse = [];
+    }
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryLoadUserResponse>
+  ): QueryLoadUserResponse {
+    const message = { ...baseQueryLoadUserResponse } as QueryLoadUserResponse;
+    message.LoadUserResponse = [];
+    if (
+      object.LoadUserResponse !== undefined &&
+      object.LoadUserResponse !== null
+    ) {
+      for (const e of object.LoadUserResponse) {
+        message.LoadUserResponse.push(LoadUserResponse.fromPartial(e));
+      }
+    }
+    return message;
+  },
+};
+
 const baseQueryGetInterfaceAprRequest: object = { id: 0 };
 
 export const QueryGetInterfaceAprRequest = {
@@ -2781,6 +2927,7 @@ export interface Query {
   BorrowAll(request: QueryAllBorrowRequest): Promise<QueryAllBorrowResponse>;
   /** Queries a User by id. */
   User(request: QueryGetUserRequest): Promise<QueryGetUserResponse>;
+  UserLoad(request: QueryLoadUserRequest): Promise<QueryLoadUserResponse>;
   /** Queries a list of User items. */
   UserAll(request: QueryAllUserRequest): Promise<QueryAllUserResponse>;
   /** Queries a InterfaceApr by id. */
@@ -2921,6 +3068,18 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryGetUserResponse.decode(new Reader(data))
+    );
+  }
+
+  UserLoad(request: QueryLoadUserRequest): Promise<QueryLoadUserResponse> {
+    const data = QueryLoadUserRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "cosmonaut.wayne.wayne.Query",
+      "UserLoad",
+      data
+    );
+    return promise.then((data) =>
+      QueryLoadUserResponse.decode(new Reader(data))
     );
   }
 

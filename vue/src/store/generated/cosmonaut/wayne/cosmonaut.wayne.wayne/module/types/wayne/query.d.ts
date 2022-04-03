@@ -2,7 +2,7 @@ import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../wayne/params";
 import { Pool } from "../wayne/pool";
 import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
-import { LoadPoolResponse } from "../wayne/load_pool_response";
+import { LoadPoolResponse, LoadUserResponse } from "../wayne/load_pool_response";
 import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
@@ -76,6 +76,12 @@ export interface QueryAllUserRequest {
 export interface QueryAllUserResponse {
     User: User[];
     pagination: PageResponse | undefined;
+}
+export interface QueryLoadUserRequest {
+    id: string;
+}
+export interface QueryLoadUserResponse {
+    LoadUserResponse: LoadUserResponse[];
 }
 export interface QueryGetInterfaceAprRequest {
     id: number;
@@ -269,6 +275,20 @@ export declare const QueryAllUserResponse: {
     toJSON(message: QueryAllUserResponse): unknown;
     fromPartial(object: DeepPartial<QueryAllUserResponse>): QueryAllUserResponse;
 };
+export declare const QueryLoadUserRequest: {
+    encode(message: QueryLoadUserRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryLoadUserRequest;
+    fromJSON(object: any): QueryLoadUserRequest;
+    toJSON(message: QueryLoadUserRequest): unknown;
+    fromPartial(object: DeepPartial<QueryLoadUserRequest>): QueryLoadUserRequest;
+};
+export declare const QueryLoadUserResponse: {
+    encode(message: QueryLoadUserResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryLoadUserResponse;
+    fromJSON(object: any): QueryLoadUserResponse;
+    toJSON(message: QueryLoadUserResponse): unknown;
+    fromPartial(object: DeepPartial<QueryLoadUserResponse>): QueryLoadUserResponse;
+};
 export declare const QueryGetInterfaceAprRequest: {
     encode(message: QueryGetInterfaceAprRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetInterfaceAprRequest;
@@ -400,6 +420,7 @@ export interface Query {
     BorrowAll(request: QueryAllBorrowRequest): Promise<QueryAllBorrowResponse>;
     /** Queries a User by id. */
     User(request: QueryGetUserRequest): Promise<QueryGetUserResponse>;
+    UserLoad(request: QueryLoadUserRequest): Promise<QueryLoadUserResponse>;
     /** Queries a list of User items. */
     UserAll(request: QueryAllUserRequest): Promise<QueryAllUserResponse>;
     /** Queries a InterfaceApr by id. */
@@ -431,6 +452,7 @@ export declare class QueryClientImpl implements Query {
     Borrow(request: QueryGetBorrowRequest): Promise<QueryGetBorrowResponse>;
     BorrowAll(request: QueryAllBorrowRequest): Promise<QueryAllBorrowResponse>;
     User(request: QueryGetUserRequest): Promise<QueryGetUserResponse>;
+    UserLoad(request: QueryLoadUserRequest): Promise<QueryLoadUserResponse>;
     UserAll(request: QueryAllUserRequest): Promise<QueryAllUserResponse>;
     InterfaceApr(request: QueryGetInterfaceAprRequest): Promise<QueryGetInterfaceAprResponse>;
     InterfaceAprAll(request: QueryAllInterfaceAprRequest): Promise<QueryAllInterfaceAprResponse>;

@@ -4,7 +4,7 @@ import * as Long from "long";
 import { Params } from "../wayne/params";
 import { Pool } from "../wayne/pool";
 import { PageRequest, PageResponse, } from "../cosmos/base/query/v1beta1/pagination";
-import { LoadPoolResponse } from "../wayne/load_pool_response";
+import { LoadPoolResponse, LoadUserResponse, } from "../wayne/load_pool_response";
 import { Deposit } from "../wayne/deposit";
 import { Borrow } from "../wayne/borrow";
 import { User } from "../wayne/user";
@@ -1189,6 +1189,116 @@ export const QueryAllUserResponse = {
         return message;
     },
 };
+const baseQueryLoadUserRequest = { id: "" };
+export const QueryLoadUserRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.id !== "") {
+            writer.uint32(10).string(message.id);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryLoadUserRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryLoadUserRequest };
+        if (object.id !== undefined && object.id !== null) {
+            message.id = String(object.id);
+        }
+        else {
+            message.id = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.id !== undefined && (obj.id = message.id);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryLoadUserRequest };
+        if (object.id !== undefined && object.id !== null) {
+            message.id = object.id;
+        }
+        else {
+            message.id = "";
+        }
+        return message;
+    },
+};
+const baseQueryLoadUserResponse = {};
+export const QueryLoadUserResponse = {
+    encode(message, writer = Writer.create()) {
+        for (const v of message.LoadUserResponse) {
+            LoadUserResponse.encode(v, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryLoadUserResponse };
+        message.LoadUserResponse = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.LoadUserResponse.push(LoadUserResponse.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryLoadUserResponse };
+        message.LoadUserResponse = [];
+        if (object.LoadUserResponse !== undefined &&
+            object.LoadUserResponse !== null) {
+            for (const e of object.LoadUserResponse) {
+                message.LoadUserResponse.push(LoadUserResponse.fromJSON(e));
+            }
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.LoadUserResponse) {
+            obj.LoadUserResponse = message.LoadUserResponse.map((e) => e ? LoadUserResponse.toJSON(e) : undefined);
+        }
+        else {
+            obj.LoadUserResponse = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryLoadUserResponse };
+        message.LoadUserResponse = [];
+        if (object.LoadUserResponse !== undefined &&
+            object.LoadUserResponse !== null) {
+            for (const e of object.LoadUserResponse) {
+                message.LoadUserResponse.push(LoadUserResponse.fromPartial(e));
+            }
+        }
+        return message;
+    },
+};
 const baseQueryGetInterfaceAprRequest = { id: 0 };
 export const QueryGetInterfaceAprRequest = {
     encode(message, writer = Writer.create()) {
@@ -2263,6 +2373,11 @@ export class QueryClientImpl {
         const data = QueryGetUserRequest.encode(request).finish();
         const promise = this.rpc.request("cosmonaut.wayne.wayne.Query", "User", data);
         return promise.then((data) => QueryGetUserResponse.decode(new Reader(data)));
+    }
+    UserLoad(request) {
+        const data = QueryLoadUserRequest.encode(request).finish();
+        const promise = this.rpc.request("cosmonaut.wayne.wayne.Query", "UserLoad", data);
+        return promise.then((data) => QueryLoadUserResponse.decode(new Reader(data)));
     }
     UserAll(request) {
         const data = QueryAllUserRequest.encode(request).finish();

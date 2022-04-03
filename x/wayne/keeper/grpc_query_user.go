@@ -53,3 +53,47 @@ func (k Keeper) User(c context.Context, req *types.QueryGetUserRequest) (*types.
 
 	return &types.QueryGetUserResponse{User: user}, nil
 }
+
+func (k Keeper) UserLoad(c context.Context, req *types.QueryLoadUserRequest) (*types.QueryLoadUserResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	// var user types.User
+	ctx := sdk.UnwrapSDKContext(c)
+
+	userList := k.GetAllUser(ctx)
+
+	var queryUser types.User
+	for _, user := range userList {
+		if user.Creator == req.Id {
+			queryUser = user
+		}
+	}
+	//TODO: keynotfound error when user has not been found
+	var userAssetList []*types.LoadUserResponse
+
+	userAddress, err := sdk.AccAddressFromBech32(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	assetBalances := k.bankKeeper.GetAllBalances(ctx, userAddress)[1:]
+	// assetPrices := oracle.GetAllPrices()
+
+	for i := 0; i < assetBalances.Len(); i++ {
+		var userAsset types.LoadUserResponse
+		userAsset.AssetBalance = assetBalances[i].Amount.Int64()
+		userAsset.AssetDenom = assetBalances[i].Denom
+		// userAsset.AssetPrice = int32(assetPrices[i] * 1000000)
+		userAsset.Collateral = queryUser.Collateral[i]
+		userAsset.AssetDeposit = queryUser.Deposit[i].Amount
+		userAsset.AssetBorrow = queryUser.Borrow[i].Amount
+
+		userAssetList = append(userAssetList, &userAsset)
+	}
+	// store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UserKey))
+	// k.cdc.MustUnmarshalBinaryBare(store.Get(GetUserIDBytes(req.Id)), &user)
+
+	return &types.QueryLoadUserResponse{LoadUserResponse: userAssetList}, nil
+}

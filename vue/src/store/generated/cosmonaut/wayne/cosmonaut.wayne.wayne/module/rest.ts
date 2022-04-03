@@ -140,6 +140,25 @@ export interface WayneLoadPoolResponse {
   creator?: string;
 }
 
+export interface WayneLoadUserResponse {
+  /** @format int32 */
+  AssetApy?: number;
+  AssetDenom?: string;
+
+  /** @format int64 */
+  AssetBalance?: string;
+
+  /** @format int32 */
+  AssetDeposit?: number;
+
+  /** @format int32 */
+  AssetBorrow?: number;
+
+  /** @format int32 */
+  AssetPrice?: number;
+  Collateral?: boolean;
+}
+
 export interface WayneMsgCreateBorrowResponse {
   /** @format uint64 */
   id?: string;
@@ -401,6 +420,10 @@ export interface WayneQueryLoadPoolResponse {
    *  }
    */
   pagination?: V1Beta1PageResponse;
+}
+
+export interface WayneQueryLoadUserResponse {
+  LoadUserResponse?: WayneLoadUserResponse[];
 }
 
 /**
@@ -793,6 +816,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       path: `/cosmonaut/wayne/wayne/loadPools`,
       method: "GET",
       query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryUserLoad
+   * @request GET:/cosmonaut/wayne/wayne/loadUser/{id}
+   */
+  queryUserLoad = (id: string, params: RequestParams = {}) =>
+    this.request<WayneQueryLoadUserResponse, RpcStatus>({
+      path: `/cosmonaut/wayne/wayne/loadUser/${id}`,
+      method: "GET",
       format: "json",
       ...params,
     });

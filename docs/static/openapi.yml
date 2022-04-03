@@ -695,6 +695,64 @@ paths:
           type: boolean
       tags:
         - Query
+  '/cosmonaut/wayne/wayne/loadUser/{id}':
+    get:
+      operationId: CosmonautWayneWayneUserLoad
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              LoadUserResponse:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    AssetApy:
+                      type: integer
+                      format: int32
+                    AssetDenom:
+                      type: string
+                    AssetBalance:
+                      type: string
+                      format: int64
+                    AssetDeposit:
+                      type: integer
+                      format: int32
+                    AssetBorrow:
+                      type: integer
+                      format: int32
+                    AssetPrice:
+                      type: integer
+                      format: int32
+                    Collateral:
+                      type: boolean
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /cosmonaut/wayne/wayne/load_pool_response:
     get:
       summary: Queries a list of LoadPoolResponse items.
@@ -14553,6 +14611,28 @@ definitions:
         format: int32
       creator:
         type: string
+  cosmonaut.wayne.wayne.LoadUserResponse:
+    type: object
+    properties:
+      AssetApy:
+        type: integer
+        format: int32
+      AssetDenom:
+        type: string
+      AssetBalance:
+        type: string
+        format: int64
+      AssetDeposit:
+        type: integer
+        format: int32
+      AssetBorrow:
+        type: integer
+        format: int32
+      AssetPrice:
+        type: integer
+        format: int32
+      Collateral:
+        type: boolean
   cosmonaut.wayne.wayne.MsgCreateBorrowResponse:
     type: object
     properties:
@@ -15565,6 +15645,33 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
+  cosmonaut.wayne.wayne.QueryLoadUserResponse:
+    type: object
+    properties:
+      LoadUserResponse:
+        type: array
+        items:
+          type: object
+          properties:
+            AssetApy:
+              type: integer
+              format: int32
+            AssetDenom:
+              type: string
+            AssetBalance:
+              type: string
+              format: int64
+            AssetDeposit:
+              type: integer
+              format: int32
+            AssetBorrow:
+              type: integer
+              format: int32
+            AssetPrice:
+              type: integer
+              format: int32
+            Collateral:
+              type: boolean
   cosmonaut.wayne.wayne.QueryParamsResponse:
     type: object
     properties:
