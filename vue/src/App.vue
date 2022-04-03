@@ -1,60 +1,49 @@
 <template>
-  <div>
-    <SpTheme>
-      <SpNavbar
-        :links="navbarLinks"
-        :activeRoute="router.currentRoute.value.path"
-      />
-      <router-view />
-    </SpTheme>
-  </div>
+	<div v-if="initialized" class="container">
+		<Header />
+		<router-view />
+	</div>
 </template>
 
-<script lang="ts">
-import { computed, onBeforeMount } from 'vue'
-import { useStore } from 'vuex'
-import { SpTheme, SpNavbar, SpTx } from '@starport/vue'
-import { useRouter } from 'vue-router'
-
-export default {
-  components: { SpTheme, SpNavbar, SpTx },
-
-  setup() {
-    // store
-    let $s = useStore()
-
-    // router
-    let router = useRouter()
-
-    // state
-    let navbarLinks = [
-      { name: 'Portfolio', url: '/portfolio' },
-      { name: 'Data', url: '/data' }
-    ]
-
-    // computed
-    let address = computed(() => $s.getters['common/wallet/address'])
-
-    // lh
-    onBeforeMount(async () => {
-      await $s.dispatch('common/env/init')
-
-      router.push('portfolio')
-    })
-
-    return {
-      navbarLinks,
-      // router
-      router,
-      // computed
-      address
-    }
-  }
+<style>
+html {
+	height: 100vh;
 }
-</script>
-
-<style scoped lang="scss">
 body {
-  margin: 0;
+	background: #fefefe;
+	margin: 0 auto;
+	max-width: 1200px;
+	width: 100%;
+}
+.container {
+	background: transparent;
 }
 </style>
+
+<script>
+
+import Header from './components/Header.vue'
+export default {
+	components: {
+		Header
+	},
+	data() {
+		return {
+			initialized: false
+		}
+	},
+	computed: {
+		hasWallet() {
+			return this.$store.hasModule(['common', 'wallet'])
+		}
+	},
+	async created() {
+		await this.$store.dispatch('common/env/init')
+		this.initialized = true
+	},
+	errorCaptured(err) {
+		console.log(err)
+		return false
+	}
+}
+</script>
