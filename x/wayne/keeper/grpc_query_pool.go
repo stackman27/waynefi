@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"math"
 
 	"github.com/cosmonaut/wayne/x/wayne/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -61,20 +62,21 @@ func (k Keeper) PoolLoad(c context.Context, req *types.QueryLoadPoolRequest) (*t
 
 	ctx := sdk.UnwrapSDKContext(c)
 
+	//assetPrices := oracle.GetAllPrices()
 	poolList := k.GetAllPool(ctx)
 	var loadPoolList []*types.LoadPoolResponse
 	for _, msg := range poolList {
 		var loadPool types.LoadPoolResponse
 		currentTargetBorrowRatio := float64(msg.BorrowBalance) / float64(msg.DepositBalance)
 		currentDepositApy := types.DepositInterest + types.DepositInterest*(currentTargetBorrowRatio-float64(types.TargetBorrowRatio)*0.01)*types.InterestFactor
-
-		//currentDepositApy = math.Max(currentDepositApy, types.MinimumDepositInterest)
-
+		currentDepositApy = math.Max(currentDepositApy, 0)
 		loadPool.Asset = msg.Asset
 		loadPool.CollatoralFactor = msg.CollatoralFactor
 		loadPool.Liquidity = msg.DepositBalance - msg.BorrowBalance
 		loadPool.DepositApy = int32(currentDepositApy * 1000000)
 		loadPool.BorrowApy = int32(currentDepositApy / currentTargetBorrowRatio * 1000000)
+		//loadPool.AssetPrice = int32(assetPrices[i] * 1000000)
+
 		loadPoolList = append(loadPoolList, &loadPool)
 	}
 
